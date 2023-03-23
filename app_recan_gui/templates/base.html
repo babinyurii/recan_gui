@@ -1,0 +1,80 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>recan gui</title>
+</head>
+
+
+<header>recan gui</header>
+
+
+<body>
+{% block content %}
+
+
+<!-- upload alignment -->
+<form method="post" enctype="multipart/form-data" name="up">
+    {% csrf_token %}
+    <input type="file" name="alignment_file">
+    <button type="submit" name="upload_alignment">submit your alignment</button>
+</form>
+<!-- ============================== -->
+
+
+
+
+<!-- button to plot  -->
+<form action="#" method="post">
+    {% csrf_token %}
+<!-- sequences list and radiobuttons -->
+    <p>alignment: {{ base_file_name }}</p>
+    {% if alignment %}
+    <p>choose potential recombinant:</p>
+        <ol>
+            {% for seq in sequences %}
+                <li>
+                    <input type="radio" id="{{ seq }}" name="pot_rec" value="{{ seq }}" maxlength="50">
+                    <label for="{{ seq }}">{{ seq }}</label>
+                </li>
+            {% endfor %}
+        </ol>
+        {% else %}
+        <p>no alignment uploaded</p>
+    {% endif %}
+<!-- ============================== -->
+    <input id="window_size" type="number" name="window_size" 
+        value="{{ default_window_size }}" min="25" max="1000">
+    <label for="window_size">window size</label>
+    <input id="window_shift" type="number" name="window_shift" 
+        value="{{ default_window_shift }}" min="10" max="1000">
+    <label for="window_shift">window shift</label>
+    <button type="submit" name="calc_plot_form">plot</button>
+</form>
+
+{{ window_size }}
+{{ window_shift  }}
+{{ pot_rec }}
+<p>uploaded file name: {{ alignment }}</p>
+<p>sequences: {{ sequences }}</p>
+
+
+<!-- plotting -->
+ {% if plot_div %}
+<div style="width:1000;height:500">
+    {{ plot_div | safe }}
+</div>
+{% endif %}
+
+<!-- ============================== -->
+
+
+{% endblock  %}
+    
+</body>
+
+
+</html>
+
+
