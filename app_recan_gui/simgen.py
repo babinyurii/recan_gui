@@ -22,7 +22,7 @@ class Simgen():
     def _plot_distance_by_plotly(self):
                 
         """draws similarity plot using plotly"""
-        init_notebook_mode()
+        #init_notebook_mode()
         data = []
         for key in self.distance_data.keys():
             trace = go.Scatter(y=self.distance_data[key], x=self.ticks_for_x_axis, name=key)
@@ -37,8 +37,11 @@ class Simgen():
             #legend=dict(x=-0.1, y=1.5))
             
         fig = go.Figure(data=data, layout=layout)
-        iplot(fig)
-        print("potential recombinant: ", self.pot_rec_id)
+        plot = fig.to_html()
+        return plot
+
+        #iplot(fig)
+        #print("potential recombinant: ", self.pot_rec_id)
         
         
     def _get_ticks_for_x_axis(self):
@@ -142,7 +145,8 @@ class Simgen():
                 self.distance_data[seq.id].append(distance)
 
         
-        self._plot_distance_by_plotly()
+        plot = self._plot_distance_by_plotly()
+        return plot
         
         
         

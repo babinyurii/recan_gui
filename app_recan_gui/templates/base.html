@@ -45,19 +45,20 @@
     {% endif %}
 <!-- ============================== -->
     <input id="window_size" type="number" name="window_size" 
-        value="{{ default_window_size }}" min="25" max="1000">
+        value="{{ default_window_size }}" min="50" max="1000">
     <label for="window_size">window size</label>
     <input id="window_shift" type="number" name="window_shift" 
-        value="{{ default_window_shift }}" min="10" max="1000">
+        value="{{ default_window_shift }}" min="25" max="1000">
     <label for="window_shift">window shift</label>
     <button type="submit" name="calc_plot_form">plot</button>
 </form>
 
-{{ window_size }}
-{{ window_shift  }}
-{{ pot_rec }}
+<p>window size: {{ window_size }}</p>
+<p>window shift: {{ window_shift  }}</p>
+<p>pot_rec: {{ pot_rec }} </p>
 <p>uploaded file name: {{ alignment }}</p>
 <p>sequences: {{ sequences }}</p>
+<p>all uploaded files: {{ all_uploaded_files }}</p>
 
 
 <!-- plotting -->

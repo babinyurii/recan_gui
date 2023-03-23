@@ -15,10 +15,11 @@ SEQ_DATA = {
     "plot_div": None,
     "window_shift": None,
     "window_size": None,
-    "pot_rec": None,
-    "default_window_size": 25,
-    "default_window_shift": 10,
-    "uploaded_alignment_url": None
+    #"pot_rec": None,
+    "default_window_size": 50,
+    "default_window_shift": 25,
+    "uploaded_alignment_url": None,
+    "all_uploaded_files": []  # TODO delete after ready. just to have a look at files in media dir
 
 }
 
@@ -42,6 +43,15 @@ def plot(start, stop):
     fig_html = fig.to_html()
     return fig_html
 
+def clean_media_dir():
+    save_dir = os.listdir("./media/")
+    if not len(save_dir) == 0:
+    
+        for file in save_dir:
+            os.remove(f"./media/{file}")
+        for file in save_dir:
+            #os.remove(file)
+            SEQ_DATA["all_uploaded_files"].append(file)
 
 
 def recan_view(request):
@@ -50,12 +60,13 @@ def recan_view(request):
         # check if file is uploaded by button. if not pass and return the same context
         # it's to avoid dict error when you call the FILES dict, but 'alignment_file' isn't there
         if "alignment_file" in request.FILES: 
+            clean_media_dir() # remove all files from media dir
+
+            # save init file name. 
+            # it'll be needed if some files will be allowed to store and choose from 
             uploaded_file = request.FILES["alignment_file"]
             SEQ_DATA["base_file_name"] = uploaded_file.name
-            save_dir = os.listdir("./media/")
-            if not len(save_dir) == 0:
-                for file in save_dir:
-                    os.remove(f"file")
+           
 
             fs = FileSystemStorage()
             file_name = fs.save(uploaded_file.name, uploaded_file)
@@ -80,12 +91,16 @@ def recan_view(request):
 
         # take data from POST dict: window, shift  - TODO > pot_rec
         plot_data = request.POST.dict()
-        start = int(plot_data.get("window_size"))
-        stop = int(plot_data.get("window_shift"))
+        win_size = int(plot_data.get("window_size"))
+        win_shift = int(plot_data.get("window_shift"))
+        pot_rec = str(plot_data.get("pot_rec"))
+        pot_rec_index = SEQ_DATA["sequences"].index(pot_rec)
 
         # mock plot. replace by simgen plot
-        SEQ_DATA["plot_div"] = plot(start, stop)
-
+        #SEQ_DATA["plot_div"] = plot(start, stop)
+        plot = sim_obj.simgen(window=win_size, shift=win_shift, pot_rec=pot_rec_index)
+        SEQ_DATA["plot_div"] = plot
+        
         # populating our SEQ_DATA dict
         SEQ_DATA["window_size"] = request.POST.get("window_size")
         SEQ_DATA["window_shift"] = request.POST.get("window_shift")
