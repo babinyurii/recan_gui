@@ -6,13 +6,9 @@
     <title>recan gui</title>
 </head>
 
-
 <header>recan gui</header>
-
-
 <body>
 {% block content %}
-
 
 <!-- upload alignment -->
 <form method="post" enctype="multipart/form-data" name="up">
@@ -22,10 +18,7 @@
 </form>
 <!-- ============================== -->
 
-
-
-
-<!-- button to plot  -->
+<!-- plotting elements and settings  -->
 <form action="#" method="post">
     {% csrf_token %}
 <!-- sequences list and radiobuttons -->
@@ -43,23 +36,48 @@
         {% else %}
         <p>no alignment uploaded</p>
     {% endif %}
-<!-- ============================== -->
+
+    <!--window size, shift and region if needed-->
     <input id="window_size" type="number" name="window_size" 
-        value="{{ default_window_size }}" min="50" max="1000">
-    <label for="window_size">window size</label>
+        value="{{ default_window_size }}" min="50" max="{{ align_len }}">
+        <label for="window_size">window size</label>
     <input id="window_shift" type="number" name="window_shift" 
-        value="{{ default_window_shift }}" min="25" max="1000">
-    <label for="window_shift">window shift</label>
-    <button type="submit" name="calc_plot_form">plot</button>
+        value="{{ default_window_shift }}" min="25" max="{{ align_len }}">
+        <label for="window_shift">window shift</label>
+    <br>
+    <!-- NOTE -->
+    <!--see if value='smth' in region inputs will work with js script which is to save values afte plot is hit-->
+    <input type="number" id="region_start" name="region_start" min="0" max="{{ align_len }}" value="0">
+        <label for="region_start">region start</label>
+    <input type="number" id="region_end" name="region_end" min="0" max="{{ align_len }}" value="{{ align_len }}">
+        <label for="region_end">region end</label>
+    
+    <!--choise of distance methods by radiobuttons-->
+    <br>
+    <input type="radio" id="pdist" name="dist_method" value="pdist" checked>
+        <label for="pdist">pairwise distance</label>
+    <input type="radio" id="jcd" name="dist_method" value="jcd">
+        <label for="jcd">Jukes-Cantor distance</label>
+    <input type="radio" id="k2p" name="dist_method" value="k2p">
+        <label for="k2p">Kimura 2-parameter distance</label>
+    <input type="radio" id="td" name="dist_method" value="td">
+        <label for="td">Tamura distance</label>
+    <!--plot button-->
+    <button type="submit" id="plot_button" name="calc_plot_form">plot</button>
 </form>
 
+<!--
 <p>window size: {{ window_size }}</p>
 <p>window shift: {{ window_shift  }}</p>
 <p>pot_rec: {{ pot_rec }} </p>
 <p>uploaded file name: {{ alignment }}</p>
 <p>sequences: {{ sequences }}</p>
 <p>all uploaded files: {{ all_uploaded_files }}</p>
-
+-->
+<p>region start: {{ region_start }}</p>
+<p>region end: {{ region_end }}</p>
+<p>SEQ_DATA["alignment"]: {{ alignment }}</p>
+<p>distance method : {{ dist_method }} </p>
 
 <!-- plotting -->
  {% if plot_div %}

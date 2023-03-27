@@ -19,7 +19,10 @@ SEQ_DATA = {
     "default_window_size": 50,
     "default_window_shift": 25,
     "uploaded_alignment_url": None,
-    "all_uploaded_files": []  # TODO delete after ready. just to have a look at files in media dir
+    "all_uploaded_files": [],  # TODO delete after ready. just to have a look at files in media dir
+    "align_len": None,
+    "region_start": None,
+    "region_end": None
 
 }
 
@@ -80,6 +83,8 @@ def recan_view(request):
             input_file_name = SEQ_DATA["alignment"]
             sim_obj = Simgen(f"./media/{input_file_name}")
             SEQ_DATA["sequences"] = sim_obj.get_info()
+            # put alignment length
+            SEQ_DATA["align_len"] = sim_obj.alignment_roll_window.align.get_alignment_length()
             return render(request, "base.html", context=SEQ_DATA)
 
     
@@ -93,18 +98,48 @@ def recan_view(request):
         plot_data = request.POST.dict()
         win_size = int(plot_data.get("window_size"))
         win_shift = int(plot_data.get("window_shift"))
-        pot_rec = str(plot_data.get("pot_rec"))
-        pot_rec_index = SEQ_DATA["sequences"].index(pot_rec)
+        dist = plot_data.get("dist_method")
+
+        # TODO just to save the distance. see if you need it further to 
+        # show the user his plot input parameters
+        SEQ_DATA["dist_method"] = dist
+
+        # TODO make def > check if region needed
+        if plot_data.get("region_start"):
+            region_start = int(plot_data.get("region_start"))
+            SEQ_DATA["region_start"] = region_start
+        if plot_data.get("region_end"):
+            region_end = int(plot_data.get("region_end"))
+            SEQ_DATA["region_end"] = region_end
+        
+        
 
         # mock plot. replace by simgen plot
         #SEQ_DATA["plot_div"] = plot(start, stop)
-        plot = sim_obj.simgen(window=win_size, shift=win_shift, pot_rec=pot_rec_index)
+        # populating our SEQ_DATA dict
+        #SEQ_DATA["window_size"] = request.POST.get("window_size")
+        #SEQ_DATA["window_shift"] = request.POST.get("window_shift")
+        #SEQ_DATA["pot_rec"] = request.POST.get("pot_rec")
+        #SEQ_DATA["region_start"] = request.POST.get("region_start")
+        #SEQ_DATA["region_end"] = request.POST.get("region_end")
+        pot_rec = str(plot_data.get("pot_rec"))
+        pot_rec_index = SEQ_DATA["sequences"].index(pot_rec)
+
+        if SEQ_DATA["region_start"] and SEQ_DATA["region_end"]:
+            plot = sim_obj.simgen(window=win_size, 
+                                shift=win_shift, 
+                                pot_rec=pot_rec_index, 
+                                region=(SEQ_DATA["region_start"], SEQ_DATA["region_end"]),
+                                dist=dist)
+        else:
+            plot = sim_obj.simgen(window=win_size, 
+                                shift=win_shift, 
+                                pot_rec=pot_rec_index,
+                                dist=dist)
+            
         SEQ_DATA["plot_div"] = plot
         
-        # populating our SEQ_DATA dict
-        SEQ_DATA["window_size"] = request.POST.get("window_size")
-        SEQ_DATA["window_shift"] = request.POST.get("window_shift")
-        SEQ_DATA["pot_rec"] = request.POST.get("pot_rec")
+        
         
 
         return render(request, "base.html", context=SEQ_DATA)

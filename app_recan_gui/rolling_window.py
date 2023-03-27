@@ -7,8 +7,6 @@ class RollingWindowOnAlignment():
     """
     
     def __init__(self, in_file):
-        #byte_str = io.BytesIO.read(in_file)
-        #text_obj = byte_str.decode("utf-8")
         self.align = AlignIO.read(in_file, "fasta")
         
     def roll_window_along_alignment(self, window_len, window_step):
