@@ -2,19 +2,29 @@
     font-family: Arial, Helvetica, sans-serif;
 }
 
+header {
+    font-size: large;
+    padding: 1%;
+    background-color: rgb(245, 222, 180);
+  }
+  
 
 .upload_and_plot_settings {
     display: flex;
   }
 
 .upload_alignment {
-    border: 2px solid cadetblue;
-}
-.plot_settings {
+
     border: 2px solid cadetblue;
 }
 
-.distance_method{
+.plot_settings {
+ 
+    border: 2px solid cadetblue;
+}
+
+.distance_method {
+
     border: 2px solid cadetblue;
 }
 

@@ -29,10 +29,11 @@
 <!-- ============================== -->
 
 <!-- plotting elements and settings  -->
+    <div class="plot_settings">
     <form action="#" method="post">
         {% csrf_token %}
         <!--window size, shift and region if needed-->
-        <div class="plot_settings">
+        
             <p>plot settings</p>
             <input id="window_size" type="number" name="window_size" 
                 value="{{ default_window_size }}" min="50" max="{{ align_len }}">
@@ -48,11 +49,13 @@
             <input type="number" id="region_end" name="region_end" min="0" max="{{ align_len }}" value="{{ align_len }}">
                 <label for="region_end">region end</label>
             <!--plot button-->
+            <br>
             <button type="submit" id="plot_button" name="calc_plot_form">plot</button>
         </div>
 
             <!--choise of distance methods by radiobuttons-->
-         <div class="distance_method">
+        <div class="distance_method">
+            <p>distance calculation method:</p>
             <ul>
                 <li>
                     <input type="radio" id="pdist" name="dist_method" value="pdist" checked>
@@ -117,10 +120,7 @@
 
 
 {% endblock  %}
-
 </body>
-
-
 </html>
 
 

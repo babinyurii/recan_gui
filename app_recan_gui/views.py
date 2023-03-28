@@ -64,6 +64,7 @@ def recan_view(request):
         # it's to avoid dict error when you call the FILES dict, but 'alignment_file' isn't there
         if "alignment_file" in request.FILES: 
             clean_media_dir() # remove all files from media dir
+            SEQ_DATA["alignment"] = None
 
             # save init file name. 
             # it'll be needed if some files will be allowed to store and choose from 
