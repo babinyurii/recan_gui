@@ -1,96 +1,123 @@
 <html lang="en">
 <head>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+    <!--script src="{% static 'search_note.js' %}"></script-->
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>recan gui</title>
 </head>
 
-<header>recan gui</header>
+<header>recan gui
+    <a href="">guide/</a>
+    <a href="https://github.com/babinyurii/recan_gui">see on github/</a>
+    <a href="https://github.com/babinyurii/recan_gui/issues">report a bug/</a>
+</header>
 <body>
 {% block content %}
 
+<div class="upload_and_plot_settings">
 <!-- upload alignment -->
-<form method="post" enctype="multipart/form-data" name="up">
-    {% csrf_token %}
-    <input type="file" name="alignment_file">
-    <button type="submit" name="upload_alignment">submit your alignment</button>
-</form>
+    <div class="upload_alignment">
+        <form method="post" enctype="multipart/form-data" name="up">
+            {% csrf_token %}
+            <input type="file" name="alignment_file">
+            <button type="submit" name="upload_alignment">submit your alignment</button>
+        </form>
+    </div>
 <!-- ============================== -->
 
 <!-- plotting elements and settings  -->
-<form action="#" method="post">
-    {% csrf_token %}
-<!-- sequences list and radiobuttons -->
-    <p>alignment: {{ base_file_name }}</p>
-    {% if alignment %}
-    <p>choose potential recombinant:</p>
-        <ol>
-            {% for seq in sequences %}
+    <form action="#" method="post">
+        {% csrf_token %}
+        <!--window size, shift and region if needed-->
+        <div class="plot_settings">
+            <p>plot settings</p>
+            <input id="window_size" type="number" name="window_size" 
+                value="{{ default_window_size }}" min="50" max="{{ align_len }}">
+                <label for="window_size">window size</label>
+            <input id="window_shift" type="number" name="window_shift" 
+                value="{{ default_window_shift }}" min="25" max="{{ align_len }}">
+                <label for="window_shift">window shift</label>
+                <br>
+            <!-- NOTE -->
+            <!--see if value='smth' in region inputs will work with js script which is to save values afte plot is hit-->
+            <input type="number" id="region_start" name="region_start" min="0" max="{{ align_len }}" value="0">
+                <label for="region_start">region start</label>
+            <input type="number" id="region_end" name="region_end" min="0" max="{{ align_len }}" value="{{ align_len }}">
+                <label for="region_end">region end</label>
+            <!--plot button-->
+            <button type="submit" id="plot_button" name="calc_plot_form">plot</button>
+        </div>
+
+            <!--choise of distance methods by radiobuttons-->
+         <div class="distance_method">
+            <ul>
                 <li>
-                    <input type="radio" id="{{ seq }}" name="pot_rec" value="{{ seq }}" maxlength="50">
-                    <label for="{{ seq }}">{{ seq }}</label>
+                    <input type="radio" id="pdist" name="dist_method" value="pdist" checked>
+                        <label for="pdist">pairwise distance</label>
                 </li>
-            {% endfor %}
-        </ol>
-        {% else %}
-        <p>no alignment uploaded</p>
-    {% endif %}
-
-    <!--window size, shift and region if needed-->
-    <input id="window_size" type="number" name="window_size" 
-        value="{{ default_window_size }}" min="50" max="{{ align_len }}">
-        <label for="window_size">window size</label>
-    <input id="window_shift" type="number" name="window_shift" 
-        value="{{ default_window_shift }}" min="25" max="{{ align_len }}">
-        <label for="window_shift">window shift</label>
-    <br>
-    <!-- NOTE -->
-    <!--see if value='smth' in region inputs will work with js script which is to save values afte plot is hit-->
-    <input type="number" id="region_start" name="region_start" min="0" max="{{ align_len }}" value="0">
-        <label for="region_start">region start</label>
-    <input type="number" id="region_end" name="region_end" min="0" max="{{ align_len }}" value="{{ align_len }}">
-        <label for="region_end">region end</label>
-    
-    <!--choise of distance methods by radiobuttons-->
-    <br>
-    <input type="radio" id="pdist" name="dist_method" value="pdist" checked>
-        <label for="pdist">pairwise distance</label>
-    <input type="radio" id="jcd" name="dist_method" value="jcd">
-        <label for="jcd">Jukes-Cantor distance</label>
-    <input type="radio" id="k2p" name="dist_method" value="k2p">
-        <label for="k2p">Kimura 2-parameter distance</label>
-    <input type="radio" id="td" name="dist_method" value="td">
-        <label for="td">Tamura distance</label>
-    <!--plot button-->
-    <button type="submit" id="plot_button" name="calc_plot_form">plot</button>
-</form>
-
-<!--
-<p>window size: {{ window_size }}</p>
-<p>window shift: {{ window_shift  }}</p>
-<p>pot_rec: {{ pot_rec }} </p>
-<p>uploaded file name: {{ alignment }}</p>
-<p>sequences: {{ sequences }}</p>
-<p>all uploaded files: {{ all_uploaded_files }}</p>
--->
-<p>region start: {{ region_start }}</p>
-<p>region end: {{ region_end }}</p>
-<p>SEQ_DATA["alignment"]: {{ alignment }}</p>
-<p>distance method : {{ dist_method }} </p>
-
-<!-- plotting -->
- {% if plot_div %}
-<div style="width:1000;height:500">
-    {{ plot_div | safe }}
+                <li>
+                    <input type="radio" id="jcd" name="dist_method" value="jcd">
+                        <label for="jcd">Jukes-Cantor distance</label>
+                <li>
+                    <input type="radio" id="k2p" name="dist_method" value="k2p">
+                        <label for="k2p">Kimura 2-parameter distance</label>
+                </li>
+                <li>
+                    <input type="radio" id="td" name="dist_method" value="td">
+                        <label for="td">Tamura distance</label>
+                </li>
+            </ul>
+        </div>
 </div>
-{% endif %}
 
+<div class="seq_and_plot">
+        <!-- sequences list and radiobuttons -->
+        <div class="sequence_list">
+            <p>alignment: {{ base_file_name }}</p>
+            {% if alignment %}
+            <p>choose potential recombinant:</p>
+                <ol>
+                    {% for seq in sequences %}
+                        <li>
+                            <input type="radio" id="{{ seq }}" name="pot_rec" value="{{ seq }}" maxlength="50">
+                            <label for="{{ seq }}">{{ seq }}</label>
+                        </li>
+                    {% endfor %}
+                </ol>
+                {% else %}
+                <p>no alignment uploaded</p>
+            {% endif %}
+        </div>
+    </form>
+
+    <!--
+    <p>window size: {{ window_size }}</p>
+    <p>window shift: {{ window_shift  }}</p>
+    <p>pot_rec: {{ pot_rec }} </p>
+    <p>uploaded file name: {{ alignment }}</p>
+    <p>sequences: {{ sequences }}</p>
+    <p>all uploaded files: {{ all_uploaded_files }}</p>
+   
+    <p>region start: {{ region_start }}</p>
+    <p>region end: {{ region_end }}</p>
+    <p>SEQ_DATA["alignment"]: {{ alignment }}</p>
+    <p>distance method : {{ dist_method }} </p>
+    -->
+    <!-- plotting -->
+    {% if plot_div %}
+    <div class="plot" style="width:1000;height:500">
+        {{ plot_div | safe }}
+    </div>
+    {% endif %}
+</div>
 <!-- ============================== -->
 
 
 {% endblock  %}
-    
+
 </body>
 
 

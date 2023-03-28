@@ -1,0 +1,38 @@
+*{
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+
+.upload_and_plot_settings {
+    display: flex;
+  }
+
+.upload_alignment {
+    border: 2px solid cadetblue;
+}
+.plot_settings {
+    border: 2px solid cadetblue;
+}
+
+.distance_method{
+    border: 2px solid cadetblue;
+}
+
+
+
+
+
+
+
+.seq_and_plot {
+    display: flex;
+}
+
+
+.sequence_list{
+    border: 2px solid cadetblue;
+}
+
+.plot {
+    border: 2px solid cadetblue;
+}
