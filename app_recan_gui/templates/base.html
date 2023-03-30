@@ -2,6 +2,7 @@
 <head>
     {% load static %}
     <link rel="stylesheet" href="{% static 'style.css' %}">
+    <script src="{% static 'script.js' %}"></script>
     <!--script src="{% static 'search_note.js' %}"></script-->
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -30,10 +31,9 @@
 
 <!-- plotting elements and settings  -->
     <div class="plot_settings">
-    <form action="#" method="post">
+    <form action="#" method="post" name="dist_plot_form" onsubmit="validateWindow();return false">
         {% csrf_token %}
-        <!--window size, shift and region if needed-->
-        
+        <!--window size, shift and region if needed-->     
             <p>plot settings</p>
             <input id="window_size" type="number" name="window_size" 
                 value="{{ default_window_size }}" min="50" max="{{ align_len }}">
@@ -42,6 +42,7 @@
                 value="{{ default_window_shift }}" min="25" max="{{ align_len }}">
                 <label for="window_shift">window shift</label>
                 <br>
+               
             <!-- NOTE -->
             <!--see if value='smth' in region inputs will work with js script which is to save values afte plot is hit-->
             <input type="number" id="region_start" name="region_start" min="0" max="{{ align_len }}" value="0">
@@ -52,7 +53,7 @@
             <br>
             <button type="submit" id="plot_button" name="calc_plot_form">plot</button>
         </div>
-
+        
             <!--choise of distance methods by radiobuttons-->
         <div class="distance_method">
             <p>distance calculation method:</p>
