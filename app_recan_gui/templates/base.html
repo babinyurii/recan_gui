@@ -21,17 +21,20 @@
 <div class="upload_and_plot_settings">
 <!-- upload alignment -->
     <div class="upload_alignment">
-        <form method="post" enctype="multipart/form-data" name="up">
+        <form method="post" enctype="multipart/form-data" name="upload_alignment">
             {% csrf_token %}
-            <input type="file" name="alignment_file">
+            <input type="file" name="alignment_file" id="alignment_file">
             <button type="submit" name="upload_alignment">submit your alignment</button>
+            <p>alignment:</p>
+            <p id="alignment_name">{{ base_file_name }}</p>
+            <!-- p id="alignment_name">{{ base_file_name }}</p-->
         </form>
     </div>
 <!-- ============================== -->
 
 <!-- plotting elements and settings  -->
     <div class="plot_settings">
-    <form action="#" method="post" name="dist_plot_form" onsubmit="validateWindow();return false">
+    <form action="#" method="post" name="dist_plot_form" onsubmit="return validateWindow();">
         {% csrf_token %}
         <!--window size, shift and region if needed-->     
             <p>plot settings</p>
@@ -80,7 +83,7 @@
 <div class="seq_and_plot">
         <!-- sequences list and radiobuttons -->
         <div class="sequence_list">
-            <p>alignment: {{ base_file_name }}</p>
+           
             {% if alignment %}
             <p>choose potential recombinant:</p>
                 <ol>

@@ -15,7 +15,6 @@ SEQ_DATA = {
     "plot_div": None,
     "window_shift": None,
     "window_size": None,
-    #"pot_rec": None,
     "default_window_size": 50,
     "default_window_shift": 25,
     "uploaded_alignment_url": None,
@@ -65,6 +64,7 @@ def recan_view(request):
         if "alignment_file" in request.FILES: 
             clean_media_dir() # remove all files from media dir
             SEQ_DATA["alignment"] = None
+            SEQ_DATA["plot_div"] = None
 
             # save init file name. 
             # it'll be needed if some files will be allowed to store and choose from 
@@ -145,7 +145,7 @@ def recan_view(request):
 
         return render(request, "base.html", context=SEQ_DATA)
     else:
-        SEQ_DATA["alignment"] = None   
+        SEQ_DATA["alignment"] = None
 
     #except:
     #    pass
