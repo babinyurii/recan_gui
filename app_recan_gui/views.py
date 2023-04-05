@@ -12,6 +12,7 @@ SEQ_DATA = {
     "base_file_name": None,
     "sequences": ["virus_1", "virus_2", "virus_3"],
     "pot_rec": None,
+    "pot_rec_id": None,
     "plot_div": None,
     "window_shift": None,
     "window_size": None,
@@ -21,7 +22,12 @@ SEQ_DATA = {
     "all_uploaded_files": [],  # TODO delete after ready. just to have a look at files in media dir
     "align_len": None,
     "region_start": None,
-    "region_end": None
+    "region_end": None,
+    "dist_methods": {"pairwise distance": "pdist", 
+                     "Jukes-Cantor distance": "jcd", 
+                     "Kimura 2-parameter distance": "k2p",
+                     "Tamura distance": "td" }, # we need dict, with values of short dist names to pass to simgen
+    "dist_method_chosen": None
 
 }
 
@@ -86,6 +92,7 @@ def recan_view(request):
             SEQ_DATA["sequences"] = sim_obj.get_info()
             # put alignment length
             SEQ_DATA["align_len"] = sim_obj.alignment_roll_window.align.get_alignment_length()
+            SEQ_DATA["pot_rec_id"] = SEQ_DATA["sequences"][0]
             return render(request, "base.html", context=SEQ_DATA)
 
     
@@ -125,6 +132,7 @@ def recan_view(request):
         #SEQ_DATA["region_end"] = request.POST.get("region_end")
         pot_rec = str(plot_data.get("pot_rec"))
         pot_rec_index = SEQ_DATA["sequences"].index(pot_rec)
+        SEQ_DATA["pot_rec_id"] = pot_rec
 
         if SEQ_DATA["region_start"] and SEQ_DATA["region_end"]:
             plot = sim_obj.simgen(window=win_size, 

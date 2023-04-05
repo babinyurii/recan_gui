@@ -4,7 +4,7 @@ function validateWindow() {
 
     let region_start = Number(document.forms["dist_plot_form"]["region_start"].value);
     let region_end = Number(document.forms["dist_plot_form"]["region_end"].value);
-
+   
     if (window_size < window_shift) {
         alert ("window size should be greater than window shift");
         return false;
@@ -15,7 +15,10 @@ function validateWindow() {
         return false;
     }
 
+
+
     else {
         return true;
     }
 }
+

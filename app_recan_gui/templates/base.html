@@ -23,10 +23,10 @@
     <div class="upload_alignment">
         <form method="post" enctype="multipart/form-data" name="upload_alignment">
             {% csrf_token %}
-            <input type="file" name="alignment_file" id="alignment_file">
+            <input type="file" name="alignment_file" id="alignment_file" required>
             <button type="submit" name="upload_alignment">submit your alignment</button>
             <p>alignment:</p>
-            <p id="alignment_name">{{ base_file_name }}</p>
+            <p id="alignment_name" name="alignment_name">{{alignment}}</p>
             <!-- p id="alignment_name">{{ base_file_name }}</p-->
         </form>
     </div>
@@ -54,13 +54,24 @@
                 <label for="region_end">region end</label>
             <!--plot button-->
             <br>
-            <button type="submit" id="plot_button" name="calc_plot_form">plot</button>
+            {% if alignment %}
+                <button type="submit" id="plot_button" name="calc_plot_form">plot</button>
+            {% else %}
+                <button type="submit" id="plot_button" name="calc_plot_form">no plot</button>
+            {% endif %}
+            
         </div>
         
             <!--choise of distance methods by radiobuttons-->
         <div class="distance_method">
             <p>distance calculation method:</p>
             <ul>
+            <!-- {% for dist in dist_methods %}
+                 <li>
+                    <input type="radio" id="{{ dist }}" name="dist_method" value="{{ dist }}">
+                        <label for="{{ dist }}">"{{ dist }}"label>
+                </li>
+            {% endfor %} -->
                 <li>
                     <input type="radio" id="pdist" name="dist_method" value="pdist" checked>
                         <label for="pdist">pairwise distance</label>
@@ -88,15 +99,26 @@
             <p>choose potential recombinant:</p>
                 <ol>
                     {% for seq in sequences %}
+                        <!-- keep checked by user -->
+                        {% if seq == pot_rec_id %}
                         <li>
-                            <input type="radio" id="{{ seq }}" name="pot_rec" value="{{ seq }}" maxlength="50">
+                            <input type="radio" id="{{ seq }}" name="pot_rec" value="{{ seq }}" maxlength="30" checked>
                             <label for="{{ seq }}">{{ seq }}</label>
                         </li>
+                        {% else %}
+                         <li>
+                            <input type="radio" id="{{ seq }}" name="pot_rec" value="{{ seq }}" maxlength="30" >
+                            <label for="{{ seq }}">{{ seq }}</label>
+                        </li>
+                        {% endif %}
                     {% endfor %}
                 </ol>
-                {% else %}
+            {% else %}
                 <p>no alignment uploaded</p>
             {% endif %}
+
+
+            
         </div>
     </form>
 
