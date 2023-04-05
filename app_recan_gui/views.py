@@ -5,7 +5,7 @@ import random # to test the plot
 from .simgen import Simgen
 from django.core.files.storage import FileSystemStorage
 import os
-
+from django.contrib import messages
 
 SEQ_DATA = {
     "alignment": None,
@@ -71,29 +71,35 @@ def recan_view(request):
             clean_media_dir() # remove all files from media dir
             SEQ_DATA["alignment"] = None
             SEQ_DATA["plot_div"] = None
-
             # save init file name. 
             # it'll be needed if some files will be allowed to store and choose from 
             uploaded_file = request.FILES["alignment_file"]
-            SEQ_DATA["base_file_name"] = uploaded_file.name
-           
+            # here to check extension
+            if uploaded_file.name.rsplit(".")[-1] in ["fas", "fa", "fasta"]:
+                #messages.error(request, "EXTENSION ok")
+                SEQ_DATA["base_file_name"] = uploaded_file.name
+                fs = FileSystemStorage()
+                file_name = fs.save(uploaded_file.name, uploaded_file)
+                uploaded_file_url = fs.url(file_name)
+                SEQ_DATA["uploaded_alignment_url"] = uploaded_file_url
+                #path = uploaded_file.file
+                SEQ_DATA["alignment"] = file_name
+                #SEQ_DATA["plot_div"] = None
+                SEQ_DATA["sequences"].append("new_seq")
+                input_file_name = SEQ_DATA["alignment"]
+                sim_obj = Simgen(f"./media/{input_file_name}")
+                SEQ_DATA["sequences"] = sim_obj.get_info()
+                if len(SEQ_DATA["sequences"]) >= 3:
+                    # put alignment length
+                    SEQ_DATA["align_len"] = sim_obj.alignment_roll_window.align.get_alignment_length()
+                    SEQ_DATA["pot_rec_id"] = SEQ_DATA["sequences"][0]
+                    return render(request, "base.html", context=SEQ_DATA)
+                else:
+                    messages.error(request, "file contains less than three sequences")
+                    SEQ_DATA["alignment"] = None
 
-            fs = FileSystemStorage()
-            file_name = fs.save(uploaded_file.name, uploaded_file)
-            uploaded_file_url = fs.url(file_name)
-            SEQ_DATA["uploaded_alignment_url"] = uploaded_file_url
-            #path = uploaded_file.file
-           
-            SEQ_DATA["alignment"] = file_name
-            #SEQ_DATA["plot_div"] = None
-            SEQ_DATA["sequences"].append("new_seq")
-            input_file_name = SEQ_DATA["alignment"]
-            sim_obj = Simgen(f"./media/{input_file_name}")
-            SEQ_DATA["sequences"] = sim_obj.get_info()
-            # put alignment length
-            SEQ_DATA["align_len"] = sim_obj.alignment_roll_window.align.get_alignment_length()
-            SEQ_DATA["pot_rec_id"] = SEQ_DATA["sequences"][0]
-            return render(request, "base.html", context=SEQ_DATA)
+            else:
+                messages.error(request, "check file extension")
 
     
     elif request.method == "POST" and "calc_plot_form" in request.POST:

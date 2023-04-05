@@ -29,9 +29,9 @@ header {
 }
 
 
-
-
-
+.error_message {
+    color: red;
+}
 
 
 .seq_and_plot {

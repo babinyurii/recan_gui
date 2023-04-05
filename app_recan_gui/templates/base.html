@@ -29,6 +29,15 @@
             <p id="alignment_name" name="alignment_name">{{alignment}}</p>
             <!-- p id="alignment_name">{{ base_file_name }}</p-->
         </form>
+        {% if messages %}
+            <p>Errors:</p>
+            <ul class="messages">
+            {% for message in messages %}
+                <li class="error_message">{{ message }}</li>
+            {% endfor %}
+            </ul>
+        {% endif %}
+
     </div>
 <!-- ============================== -->
 
@@ -57,7 +66,7 @@
             {% if alignment %}
                 <button type="submit" id="plot_button" name="calc_plot_form">plot</button>
             {% else %}
-                <button type="submit" id="plot_button" name="calc_plot_form">no plot</button>
+                <button type="submit" id="plot_button" name="calc_plot_form" disabled>plot</button>
             {% endif %}
             
         </div>
@@ -71,7 +80,7 @@
                     <input type="radio" id="{{ dist }}" name="dist_method" value="{{ dist }}">
                         <label for="{{ dist }}">"{{ dist }}"label>
                 </li>
-            {% endfor %} -->
+                {% endfor %} -->
                 <li>
                     <input type="radio" id="pdist" name="dist_method" value="pdist" checked>
                         <label for="pdist">pairwise distance</label>
@@ -132,9 +141,10 @@
    
     <p>region start: {{ region_start }}</p>
     <p>region end: {{ region_end }}</p>
-    <p>SEQ_DATA["alignment"]: {{ alignment }}</p>
+    
     <p>distance method : {{ dist_method }} </p>
     -->
+    <p>SEQ_DATA["alignment"]: {{ alignment }}</p>
     <!-- plotting -->
     {% if plot_div %}
     <div class="plot" style="width:1000;height:500">
