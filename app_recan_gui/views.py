@@ -1,7 +1,7 @@
 from django.shortcuts import render
-import plotly.offline as opy
-import plotly.graph_objs as go
-import random # to test the plot
+#import plotly.offline as opy
+#import plotly.graph_objs as go
+#import random # to test the plot
 from .simgen import Simgen
 from django.core.files.storage import FileSystemStorage
 import os
