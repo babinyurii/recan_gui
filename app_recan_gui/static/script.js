@@ -15,8 +15,6 @@ function validateWindow() {
         return false;
     }
 
-
-
     else {
         return true;
     }

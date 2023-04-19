@@ -1,5 +1,5 @@
 from Bio import AlignIO
-import io
+#import io
 class RollingWindowOnAlignment():
     """
     alignment obj as the biopython multiple alignment

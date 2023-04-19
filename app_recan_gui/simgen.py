@@ -2,7 +2,7 @@
 
 import plotly.graph_objs as go
 import pandas as pd
-from plotly.offline import init_notebook_mode, iplot
+#from plotly.offline import init_notebook_mode, iplot
 from .rolling_window import RollingWindowOnAlignment
 from .calc_pairwise_distance import calc_pairwise_distance
 

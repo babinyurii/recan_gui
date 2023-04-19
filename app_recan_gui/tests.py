@@ -1,7 +1,7 @@
-from django.test import TestCase
+#from django.test import TestCase
 
 # Create your tests here.
-import sys
+#import sys
 from Bio import AlignIO
 
 #sys.path.append("..")

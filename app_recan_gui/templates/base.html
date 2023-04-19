@@ -27,7 +27,7 @@
             <button type="submit" name="upload_alignment">submit your alignment</button>
             <p>alignment:</p>
             <p id="alignment_name" name="alignment_name">{{alignment}}</p>
-            <!-- p id="alignment_name">{{ base_file_name }}</p-->
+            <p id="base file name">{{ base_file_name }}</p>
         </form>
         {% if messages %}
             <p>Errors:</p>
@@ -143,8 +143,9 @@
     <p>region end: {{ region_end }}</p>
     
     <p>distance method : {{ dist_method }} </p>
-    -->
-    <p>SEQ_DATA["alignment"]: {{ alignment }}</p>
+    
+    <p>SEQ_DATA["alignment"]: {{ alignment }}</p> -->
+
     <!-- plotting -->
     {% if plot_div %}
     <div class="plot" style="width:1000;height:500">
