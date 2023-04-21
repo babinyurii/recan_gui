@@ -1,11 +1,12 @@
 from django.shortcuts import render
-#import plotly.offline as opy
-#import plotly.graph_objs as go
-#import random # to test the plot
 from .simgen import Simgen
 from django.core.files.storage import FileSystemStorage
 import os
 from django.contrib import messages
+
+PATH_TO_MEDIA_DIR = "./media/"
+
+
 
 SEQ_DATA = {
     "alignment": None,
@@ -31,10 +32,10 @@ SEQ_DATA = {
 
 
 def clean_media_dir():
-    save_dir = os.listdir("./media/")
+    save_dir = os.listdir(f"{PATH_TO_MEDIA_DIR}")
     if not len(save_dir) == 0:
         for file in save_dir:
-            os.remove(f"./media/{file}")
+            os.remove(f"{PATH_TO_MEDIA_DIR}{file}")
         for file in save_dir:
             #os.remove(file)
             SEQ_DATA["all_uploaded_files"].append(file)
@@ -48,7 +49,7 @@ def save_file_in_media_dir(uploaded_file):
     #path = uploaded_file.file
 
 def validate_num_of_sequences(file_name):
-    sim_obj = Simgen(f"./media/{file_name}")
+    sim_obj = Simgen(f"{PATH_TO_MEDIA_DIR}{file_name}")
     SEQ_DATA["sequences"] = sim_obj.get_info()
     if len(SEQ_DATA["sequences"]) >= 3:
         # put alignment length
@@ -83,7 +84,7 @@ def recan_view(request):
 
         # init simgen obj
         input_file_name = SEQ_DATA["alignment"]
-        sim_obj = Simgen(f"./media/{input_file_name}")
+        sim_obj = Simgen(f"{PATH_TO_MEDIA_DIR}{input_file_name}")
 
         # take data from POST dict: window, shift  - TODO > pot_rec
         # #############################################3

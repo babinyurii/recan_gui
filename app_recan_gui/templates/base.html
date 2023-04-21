@@ -23,8 +23,10 @@
     <div class="upload_alignment">
         <form method="post" enctype="multipart/form-data" name="upload_alignment">
             {% csrf_token %}
+            
             <input type="file" name="alignment_file" id="alignment_file" required>
             <button type="submit" name="upload_alignment">submit your alignment</button>
+            
             <p>alignment:</p>
             <p id="alignment_name" name="alignment_name">{{alignment}}</p>
             <p id="base file name">{{ base_file_name }}</p>
