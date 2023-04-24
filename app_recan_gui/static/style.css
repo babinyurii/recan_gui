@@ -14,18 +14,21 @@ header {
   }
 
 .upload_alignment {
-
-    border: 2px solid cadetblue;
+    /*border: 2px solid cadetblue;*/
+    flex: 20%;
+ 
 }
 
 .plot_settings {
  
     border: 2px solid cadetblue;
+    flex: 40%;
+    justify-content: center;
 }
 
 .distance_method {
-
     border: 2px solid cadetblue;
+    flex: 40%;
 }
 
 
@@ -46,4 +49,66 @@ header {
 .plot {
     border: 2px solid cadetblue;
 }
+
+
+/*try to make upload look good*/
+input[type=file]::file-selector-button {
+    border: none;
+    background: #5095b6;
+    padding: 10px 20px;
+    border-radius: 10px;
+    color: #fff;
+    cursor: pointer;
+    margin-top: 10%;
+    
+  }
+
+input[type=file]::file-selector-button:hover {
+    background: #0d45a5;
+}
+
+/* here style button submit */
+#btn_submit_alignment{
+    border: none;
+    background-color: #5095b6;
+    color: white;
+    border-radius: 10px;
+    padding: 10px 20px;
+    cursor: pointer;
+}
+
+#btn_submit_alignment:hover {
+    background: #0d45a5;
+}
+
+
+
+*/
+/* here style button plot */
+#plot_button{
+    border: none;
+    background-color: #5095b6;
+    color: white;
+    border-radius: 10px;
+    padding: 10px 20px;
+    cursor: pointer;
+}
+
+#plot_button:hover {
+    background: #0d45a5;
+}
+
+
+input[type=number] {
+    padding: 10px 20px;
+    border-radius: 10px;
+    cursor: pointer;
+    width: auto;
+    
+  }
+
+
+
+
+
 

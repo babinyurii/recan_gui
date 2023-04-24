@@ -62,7 +62,7 @@ def validate_num_of_sequences(file_name):
 
 def recan_view(request):
 
-    if request.method == "POST" and "upload_alignment" in request.POST and "alignment_file" in request.FILES:
+    if request.method == "POST" and "btn_submit_alignment" in request.POST and "alignment_file" in request.FILES:
         clean_media_dir() # remove all files from media dir
         SEQ_DATA["alignment"] = None # remove file name
         SEQ_DATA["plot_div"] = None # remove plot

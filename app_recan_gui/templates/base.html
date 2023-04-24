@@ -1,9 +1,9 @@
 <html lang="en">
 <head>
-    {% load static %}
+    <{% load static %}
     <link rel="stylesheet" href="{% static 'style.css' %}">
     <script src="{% static 'script.js' %}"></script>
-    <!--script src="{% static 'search_note.js' %}"></script-->
+    <!--link rel="stylesheet" href="https://unpkg.com/mvp.css@1.12/mvp.css"--> 
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -21,15 +21,16 @@
 <div class="upload_and_plot_settings">
 <!-- upload alignment -->
     <div class="upload_alignment">
-        <form method="post" enctype="multipart/form-data" name="upload_alignment">
+        <form method="post" enctype="multipart/form-data" name="form_upload_alignment">
             {% csrf_token %}
             
-            <input type="file" name="alignment_file" id="alignment_file" required>
-            <button type="submit" name="upload_alignment">submit your alignment</button>
-            
-            <p>alignment:</p>
-            <p id="alignment_name" name="alignment_name">{{alignment}}</p>
-            <p id="base file name">{{ base_file_name }}</p>
+            <input class="btn"  type="file" name="alignment_file" id="alignment_file" required>
+            <br>
+            <br>
+            <button class="btn"  type="submit" name="btn_submit_alignment" id="btn_submit_alignment">submit your alignment</button>
+           
+            <p id="alignment_name" name="alignment_name">Alignment: {{alignment}}</p>
+            <!--p id="base file name">{{ base_file_name }}</p-->
         </form>
         {% if messages %}
             <p>Errors:</p>
@@ -51,24 +52,24 @@
             <p>plot settings</p>
             <input id="window_size" type="number" name="window_size" 
                 value="{{ default_window_size }}" min="50" max="{{ align_len }}">
-                <label for="window_size">window size</label>
+                <label class="plot_label" for="window_size">window size</label>
             <input id="window_shift" type="number" name="window_shift" 
                 value="{{ default_window_shift }}" min="25" max="{{ align_len }}">
-                <label for="window_shift">window shift</label>
+                <label class="plot_label" for="window_shift">window shift</label>
                 <br>
                
             <!-- NOTE -->
             <!--see if value='smth' in region inputs will work with js script which is to save values afte plot is hit-->
             <input type="number" id="region_start" name="region_start" min="0" max="{{ align_len }}" value="0">
-                <label for="region_start">region start</label>
+                <label class="plot_label" for="region_start">region start</label>
             <input type="number" id="region_end" name="region_end" min="0" max="{{ align_len }}" value="{{ align_len }}">
-                <label for="region_end">region end</label>
+                <label class="plot_label"  for="region_end">region end</label>
             <!--plot button-->
             <br>
             {% if alignment %}
-                <button type="submit" id="plot_button" name="calc_plot_form">plot</button>
+                <button class="btn" type="submit" id="plot_button" name="calc_plot_form">plot</button>
             {% else %}
-                <button type="submit" id="plot_button" name="calc_plot_form" disabled>plot</button>
+                <button class="btn" type="submit" id="plot_button" name="calc_plot_form" disabled>plot</button>
             {% endif %}
             
         </div>
