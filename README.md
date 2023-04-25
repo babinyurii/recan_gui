@@ -1,6 +1,6 @@
 # recan_gui
 
-Django-based recan web version
+Django-based web version of [recan package](https://github.com/babinyurii/recan).
 
 Test version available at:  http://yuriyb.pythonanywhere.com/
 
