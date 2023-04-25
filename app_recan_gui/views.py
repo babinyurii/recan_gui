@@ -4,8 +4,11 @@ from django.core.files.storage import FileSystemStorage
 import os
 from django.contrib import messages
 
+# COMMENT THIS PATH IF UPLOAD ON PYTHONANYWHERE
 PATH_TO_MEDIA_DIR = "./media/"
 
+# FOR PYTHON ANYWHERE UNCOMMENT IF UPLOAD ON PYTHONANYWHERE: 
+#PATH_TO_MEDIA_DIR = "/home/yuriyb/prj_recan_gui/media/"
 
 
 SEQ_DATA = {

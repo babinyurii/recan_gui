@@ -19,4 +19,3 @@ function validateWindow() {
         return true;
     }
 }
-
