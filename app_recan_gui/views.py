@@ -116,19 +116,24 @@ def recan_view(request):
         # plot by simgen
         # TODO the function: plot = plot_by_simgen() <<< make function which calls the plot
         # TODO get data from SEQ_DATA not from local vars
-        if SEQ_DATA["region_start"] and SEQ_DATA["region_end"]:
-            plot = sim_obj.simgen(window=win_size, 
-                                shift=win_shift, 
-                                pot_rec=pot_rec_index, 
-                                region=(SEQ_DATA["region_start"], SEQ_DATA["region_end"]),
-                                dist=dist)
-        else:
-            plot = sim_obj.simgen(window=win_size, 
-                                shift=win_shift, 
-                                pot_rec=pot_rec_index,
-                                dist=dist)
-            
-        SEQ_DATA["plot_div"] = plot
+        try:
+            if SEQ_DATA["region_start"] and SEQ_DATA["region_end"]:
+                plot = sim_obj.simgen(window=win_size, 
+                                    shift=win_shift, 
+                                    pot_rec=pot_rec_index, 
+                                    region=(SEQ_DATA["region_start"], SEQ_DATA["region_end"]),
+                                    dist=dist)
+            else:
+                plot = sim_obj.simgen(window=win_size, 
+                                    shift=win_shift, 
+                                    pot_rec=pot_rec_index,
+                                    dist=dist)
+                
+            SEQ_DATA["plot_div"] = plot
+
+        except TypeError:
+            messages.error(request, ("distance can't by calculated by chosen method:__, try to enlarge window size, window shift or both"))
+
         #return render(request, "base.html", context=SEQ_DATA)
     else:
         SEQ_DATA["alignment"] = None

@@ -1,6 +1,6 @@
 <html lang="en">
 <head>
-    <{% load static %}
+    {% load static %}
     <link rel="stylesheet" href="{% static 'style.css' %}">
     <script src="{% static 'script.js' %}"></script>
     <!--link rel="stylesheet" href="https://unpkg.com/mvp.css@1.12/mvp.css"--> 
@@ -10,10 +10,13 @@
     <title>recan gui</title>
 </head>
 
-<header>recan gui
-    <a href="">guide/</a>
-    <a href="https://github.com/babinyurii/recan_gui">see on github/</a>
-    <a href="https://github.com/babinyurii/recan_gui/issues">report a bug/</a>
+<header>
+    <ul class="nav_bar">
+    <li class="nav_bar_item" id="recan_title">Recan</li> 
+    <li class="nav_bar_item"><a href="">Guide</a></li>
+    <!--li class="nav_bar_item"><a href="https://github.com/babinyurii/recan_gui">Recan on github</a></li-->
+    <li class="nav_bar_item"><a href="https://github.com/babinyurii/recan_gui/issues">Report a bug</a></li>
+    </ul>
 </header>
 <body>
 {% block content %}
@@ -27,7 +30,7 @@
             <input class="btn"  type="file" name="alignment_file" id="alignment_file" required>
             <br>
             <br>
-            <button class="btn"  type="submit" name="btn_submit_alignment" id="btn_submit_alignment">submit your alignment</button>
+            <button class="btn"  type="submit" name="btn_submit_alignment" id="btn_submit_alignment">Upload your alignment</button>
            
             <p id="alignment_name" name="alignment_name">Alignment: {{alignment}}</p>
             <!--p id="base file name">{{ base_file_name }}</p-->
@@ -48,22 +51,35 @@
     <div class="plot_settings">
     <form action="#" method="post" name="dist_plot_form" onsubmit="return validateWindow();">
         {% csrf_token %}
-        <!--window size, shift and region if needed-->     
-            <p>plot settings</p>
+        <!--window size, shift and region if needed-->
+        <p class="title_bold">plot settings</p>
+        <div class="plot_parameters">
+            <div class="plot_arg">     
+            <label class="plot_label" for="window_size">window size:</label>
             <input id="window_size" type="number" name="window_size" 
                 value="{{ default_window_size }}" min="50" max="{{ align_len }}">
-                <label class="plot_label" for="window_size">window size</label>
+                
+            </div>
+            <div class="plot_arg">
+             <label class="plot_label" for="window_shift">window shift:</label>
             <input id="window_shift" type="number" name="window_shift" 
                 value="{{ default_window_shift }}" min="25" max="{{ align_len }}">
-                <label class="plot_label" for="window_shift">window shift</label>
-                <br>
+               
+            </div>    
                
             <!-- NOTE -->
             <!--see if value='smth' in region inputs will work with js script which is to save values afte plot is hit-->
+            <div class="plot_arg">
+             <label class="plot_label" for="region_start">region start:</label>
             <input type="number" id="region_start" name="region_start" min="0" max="{{ align_len }}" value="0">
-                <label class="plot_label" for="region_start">region start</label>
+               
+            </div>
+            <div class="plot_arg">
+            <label class="plot_label"  for="region_end">region end:</label>
             <input type="number" id="region_end" name="region_end" min="0" max="{{ align_len }}" value="{{ align_len }}">
-                <label class="plot_label"  for="region_end">region end</label>
+              
+            </div>    
+        </div>
             <!--plot button-->
             <br>
             {% if alignment %}
@@ -76,26 +92,26 @@
         
             <!--choise of distance methods by radiobuttons-->
         <div class="distance_method">
-            <p>distance calculation method:</p>
-            <ul>
+            <p class="title_bold">distance calculation method:</p>
+            <ul >
             <!-- {% for dist in dist_methods %}
                  <li>
                     <input type="radio" id="{{ dist }}" name="dist_method" value="{{ dist }}">
                         <label for="{{ dist }}">"{{ dist }}"label>
                 </li>
                 {% endfor %} -->
-                <li>
+                <li class="distance_buttons">
                     <input type="radio" id="pdist" name="dist_method" value="pdist" checked>
                         <label for="pdist">pairwise distance</label>
                 </li>
-                <li>
+                <li class="distance_buttons">
                     <input type="radio" id="jcd" name="dist_method" value="jcd">
                         <label for="jcd">Jukes-Cantor distance</label>
-                <li>
+                <li class="distance_buttons">
                     <input type="radio" id="k2p" name="dist_method" value="k2p">
                         <label for="k2p">Kimura 2-parameter distance</label>
                 </li>
-                <li>
+                <li class="distance_buttons">
                     <input type="radio" id="td" name="dist_method" value="td">
                         <label for="td">Tamura distance</label>
                 </li>
@@ -108,7 +124,7 @@
         <div class="sequence_list">
            
             {% if alignment %}
-            <p>choose potential recombinant:</p>
+            <p class="title_bold">choose potential recombinant:</p>
                 <ol>
                     {% for seq in sequences %}
                         <!-- keep checked by user -->
@@ -150,6 +166,7 @@
     <p>SEQ_DATA["alignment"]: {{ alignment }}</p> -->
 
     <!-- plotting -->
+   
     {% if plot_div %}
     <div class="plot" style="width:1000;height:500">
         {{ plot_div | safe }}

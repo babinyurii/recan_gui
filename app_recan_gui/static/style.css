@@ -4,10 +4,28 @@
 
 header {
     font-size: large;
-    padding: 1%;
-    background-color: rgb(245, 222, 180);
+    background-color: rgb(255, 222, 173);
   }
-  
+
+.nav_bar {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+ 
+}
+
+
+.nav_bar_item {
+    display: inline;
+    padding: 20px;
+    text-decoration: none;
+}
+
+#recan_title {
+    font-weight: bold;
+    font-size: x-large;
+    padding-right: 100px;
+}
 
 .upload_and_plot_settings {
     display: flex;
@@ -15,20 +33,16 @@ header {
 
 .upload_alignment {
     /*border: 2px solid cadetblue;*/
-    flex: 20%;
+    flex: 25%;
  
 }
 
 .plot_settings {
- 
-    border: 2px solid cadetblue;
     flex: 40%;
-    justify-content: center;
 }
 
 .distance_method {
-    border: 2px solid cadetblue;
-    flex: 40%;
+    flex: 35%;
 }
 
 
@@ -42,14 +56,19 @@ header {
 }
 
 
+.distance_buttons {
+    list-style-type: none;
+}
+
+/*
 .sequence_list{
     border: 2px solid cadetblue;
 }
 
 .plot {
-    border: 2px solid cadetblue;
+   border: 2px solid cadetblue;
 }
-
+*/
 
 /*try to make upload look good*/
 input[type=file]::file-selector-button {
@@ -105,6 +124,19 @@ input[type=number] {
     width: auto;
     
   }
+
+
+.plot_parameters{
+    display: grid;
+    grid-template-columns: 50% 50%;
+    grid-template-rows: 50% 50%;
+    row-gap: 10px;
+}
+
+
+.title_bold{
+    font-weight: bold;
+}
 
 
 
