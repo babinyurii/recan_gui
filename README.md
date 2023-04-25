@@ -1,4 +1,5 @@
 # recan_gui
 
-Test version: 
-http://yuriyb.pythonanywhere.com/
+Django-based recan web version
+
+Test version available at:  http://yuriyb.pythonanywhere.com/
