@@ -57,13 +57,13 @@
             <div class="plot_arg">     
             <label class="plot_label" for="window_size">window size:</label>
             <input id="window_size" type="number" name="window_size" 
-                value="{{ default_window_size }}" min="50" max="{{ align_len }}">
+                value="{{ window_size }}" min="50" max="{{ align_len }}">
              
             </div>
             <div class="plot_arg">
              <label class="plot_label" for="window_shift">window shift:</label>
             <input id="window_shift" type="number" name="window_shift" 
-                value="{{ default_window_shift }}" min="25" max="{{ align_len }}">
+                value="{{ window_shift }}" min="25" max="{{ align_len }}">
                
             </div>    
                
@@ -71,12 +71,12 @@
             <!--see if value='smth' in region inputs will work with js script which is to save values afte plot is hit-->
             <div class="plot_arg">
              <label class="plot_label" for="region_start">region start:</label>
-            <input type="number" id="region_start" name="region_start" min="0" max="{{ align_len }}" value="0">
+            <input type="number" id="region_start" name="region_start" min="0" max="{{ align_len }}" value="{{ region_start }}">
                
             </div>
             <div class="plot_arg">
             <label class="plot_label"  for="region_end">region end:</label>
-            <input type="number" id="region_end" name="region_end" min="0" max="{{ align_len }}" value="{{ align_len }}">
+            <input type="number" id="region_end" name="region_end" min="0" max="{{ align_len }}" value="{{ region_end }}">
               
             </div>    
         </div>
@@ -101,18 +101,22 @@
                 </li>
                 {% endfor %} -->
                 <li class="distance_buttons">
-                    <input type="radio" id="pdist" name="dist_method" value="pdist" checked>
+                    <input type="radio" id="pdist" name="dist_method" value="pdist" 
+                    {% if dist_method == "pdist" %}checked{% endif %}>
                         <label for="pdist">pairwise distance</label>
                 </li>
                 <li class="distance_buttons">
-                    <input type="radio" id="jcd" name="dist_method" value="jcd">
+                    <input type="radio" id="jcd" name="dist_method" value="jcd"
+                    {% if dist_method == "jcd" %}checked{% endif %}>
                         <label for="jcd">Jukes-Cantor distance</label>
                 <li class="distance_buttons">
-                    <input type="radio" id="k2p" name="dist_method" value="k2p">
+                    <input type="radio" id="k2p" name="dist_method" value="k2p"
+                     {% if dist_method == "k2p" %}checked{% endif %}>
                         <label for="k2p">Kimura 2-parameter distance</label>
                 </li>
                 <li class="distance_buttons">
-                    <input type="radio" id="td" name="dist_method" value="td">
+                    <input type="radio" id="td" name="dist_method" value="td"
+                     {% if dist_method == "td" %}checked{% endif %}>
                         <label for="td">Tamura distance</label>
                 </li>
             </ul>
