@@ -1,5 +1,5 @@
 # recan_gui
-Recan_gui is a Django-based web version of recan package currently available at https://github.com/babinyurii/recan.
+Recan_gui is a Django-based web version of recan. The tool is currently available at https://github.com/babinyurii/recan.
 # Guide
 ## Input files
 Input files should be multiple sequence alignments in fasta format (with extenstions: `fasta`, `fas` or `fa`).
