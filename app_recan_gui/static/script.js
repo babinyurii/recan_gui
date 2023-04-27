@@ -19,3 +19,6 @@ function validateWindow() {
         return true;
     }
 }
+
+
+
