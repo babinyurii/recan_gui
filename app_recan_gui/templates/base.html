@@ -13,8 +13,7 @@
 <header>
     <ul class="nav_bar">
     <li class="nav_bar_item" id="recan_title">Recan</li> 
-    <li class="nav_bar_item"><a href="">Guide</a></li>
-    <!--li class="nav_bar_item"><a href="https://github.com/babinyurii/recan_gui">Recan on github</a></li-->
+    <li class="nav_bar_item"><a href="https://github.com/babinyurii/recan_gui">Guide</a></li>
     <li class="nav_bar_item"><a href="https://github.com/babinyurii/recan_gui/issues">Report a bug</a></li>
     </ul>
 </header>
@@ -154,21 +153,6 @@
         </div>
     </form>
 
-    <!--
-    <p>window size: {{ window_size }}</p>
-    <p>window shift: {{ window_shift  }}</p>
-    <p>pot_rec: {{ pot_rec }} </p>
-    <p>uploaded file name: {{ alignment }}</p>
-    <p>sequences: {{ sequences }}</p>
-    <p>all uploaded files: {{ all_uploaded_files }}</p>
-   
-    <p>region start: {{ region_start }}</p>
-    <p>region end: {{ region_end }}</p>
-    
-    <p>distance method : {{ dist_method }} </p>
-    
-    <p>SEQ_DATA["alignment"]: {{ alignment }}</p> -->
-
     <!-- plotting -->
    
     {% if plot_div %}
@@ -181,6 +165,9 @@
 
 
 {% endblock  %}
+<!-- p>SEQ_DATA["session"]: {{ session }}</p> 
+<p>SEQ_DATA session key: {{ session.session_key }}</p>
+<p>SEQ_DATA session data: {{ session.session_data }}</p--> 
 </body>
 </html>
 

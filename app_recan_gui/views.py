@@ -4,6 +4,7 @@ from django.core.files.storage import FileSystemStorage
 import os
 from django.contrib import messages
 
+
 # COMMENT THIS PATH IF UPLOAD ON PYTHONANYWHERE
 PATH_TO_MEDIA_DIR = "./media/"
 
@@ -23,7 +24,6 @@ SEQ_DATA = {
     "plot_div": None,
     "window_size": None,
     "window_shift": None,
-    "all_uploaded_files": [],  # TODO delete after ready. just to have a look at files in media dir
     "align_len": None,
     "region_start": 0,
     "region_end": None,
@@ -31,35 +31,42 @@ SEQ_DATA = {
                      "Jukes-Cantor distance": "jcd", 
                      "Kimura 2-parameter distance": "k2p",
                      "Tamura distance": "td" }, # we need dict, with values of short dist names to pass to simgen
-    "dist_method": "pdist"
+    "dist_method": "pdist",
+    "session": None
 
 }
 
 
 def clean_media_dir():
+    '''
+    clean media dir so that only one
+    file was uploaded
+    '''
     save_dir = os.listdir(f"{PATH_TO_MEDIA_DIR}")
     if not len(save_dir) == 0:
         for file in save_dir:
             os.remove(f"{PATH_TO_MEDIA_DIR}{file}")
-        for file in save_dir:
-            #os.remove(file)
-            SEQ_DATA["all_uploaded_files"].append(file)
+
 
 def save_file_in_media_dir(uploaded_file):
+    '''save uploaded alignment
+    '''
     fs = FileSystemStorage()
     fs.save(uploaded_file.name, uploaded_file)
-    #file_name = fs.save(uploaded_file.name, uploaded_file)
-    #uploaded_file_url = fs.url(file_name)
-    #SEQ_DATA["uploaded_alignment_url"] = uploaded_file_url
-    #path = uploaded_file.file
+
 
 def validate_num_of_sequences(file_name):
+    '''
+    check if the number of sequences in the uploaded 
+    aligment is >=  3
+    '''
     sim_obj = Simgen(f"{PATH_TO_MEDIA_DIR}{file_name}")
     SEQ_DATA["sequences"] = sim_obj.get_info()
     if len(SEQ_DATA["sequences"]) >= 3:
         return True
     else:
         return False
+
 
 def get_default_plot_settings():
     SEQ_DATA["window_size"] = DEFAULT_PLOT_SETTINGS["window_size"]
@@ -68,15 +75,18 @@ def get_default_plot_settings():
     SEQ_DATA["plot_div"] = None # remove plot     
 
 def recan_view(request):
-
-    if request.method == "POST" and "btn_submit_alignment" in request.POST and "alignment_file" in request.FILES:
+    '''main view function'''
+    # if user uploads file
+    if request.method == "POST" and "btn_submit_alignment" in request.POST \
+          and "alignment_file" in request.FILES:
         clean_media_dir() # remove all files from media dir
         get_default_plot_settings()
         uploaded_file = request.FILES["alignment_file"]
-    
-        if uploaded_file.name.rsplit(".")[-1] in ["fas", "fa", "fasta"]: # check extension
+        # check extension, if valid, proceed
+        if uploaded_file.name.rsplit(".")[-1] in ["fas", "fa", "fasta"]: 
             save_file_in_media_dir(uploaded_file)
             file_name = uploaded_file.name
+
             if validate_num_of_sequences(file_name):
                 sim_obj = Simgen(f"{PATH_TO_MEDIA_DIR}{file_name}")
                 SEQ_DATA["alignment"] = file_name
@@ -86,18 +96,15 @@ def recan_view(request):
             else:
                 messages.error(request, "file contains less than three sequences")
                 SEQ_DATA["alignment"] = None
+        # if file extension is not valid, raise related warning
         else:
             messages.error(request, "check file extension")
 
-    
+    # if use hits the plot button to get the distance plot
     elif request.method == "POST" and "calc_plot_form" in request.POST:
-
-        # init simgen obj
         input_file_name = SEQ_DATA["alignment"]
         sim_obj = Simgen(f"{PATH_TO_MEDIA_DIR}{input_file_name}")
-
         # take data from POST dict: window, shift  - TODO > pot_rec
-        # #############################################3
         # TODO collect data into context. not into local variables
         # TODO then pass these vars to the plot constructor
         plot_data = request.POST.dict()
@@ -105,11 +112,10 @@ def recan_view(request):
         win_shift = int(plot_data.get("window_shift"))
         dist = plot_data.get("dist_method")
 
-        # TODO just to save the distance. see if you need it further to 
-        # show the user his plot input parameters
+        # TODO use dist method to show plot parameters
         SEQ_DATA["dist_method"] = dist
 
-        # TODO make def > check if region needed
+        # TODO make def > check if plot of the particular genome region needed
         if plot_data.get("region_start"):
             region_start = int(plot_data.get("region_start"))
             SEQ_DATA["region_start"] = region_start
@@ -127,7 +133,6 @@ def recan_view(request):
         pot_rec_index = SEQ_DATA["sequences"].index(pot_rec)
         SEQ_DATA["pot_rec_id"] = pot_rec
 
-        #####################################################
         # plot by simgen
         # TODO the function: plot = plot_by_simgen() <<< make function which calls the plot
         # TODO get data from SEQ_DATA not from local vars
@@ -147,17 +152,18 @@ def recan_view(request):
             SEQ_DATA["plot_div"] = plot
             SEQ_DATA["window_size"] = win_size
             SEQ_DATA["window_shift"] = win_shift
-        except TypeError:
+        # if window is too small, these too error may occur 
+        # depenging on the distance method used
+        except TypeError or ZeroDivisionError:
             messages.error(request, (f"distance can't by calculated by chosen method:{ SEQ_DATA['dist_method'] }, try to enlarge window size, window shift or both"))
             SEQ_DATA["plot_div"] = None
-        #return render(request, "base.html", context=SEQ_DATA)
     else:
         SEQ_DATA["alignment"] = None
-        
 
-    #except:
-    #    pass
-        
+    if not request.session.session_key:
+        request.session.save()
+        #session_id = request.session.session_key
+    SEQ_DATA["session"] = request.session    
     return render(request, "base.html", context=SEQ_DATA)
 
 
