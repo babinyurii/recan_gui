@@ -1,9 +1,6 @@
 # recan_gui
-
-Django-based web version of [recan package](https://github.com/babinyurii/recan).
-
-Test version available at:  http://yuriyb.pythonanywhere.com/
-
+Recan_gui is a Django-based web version of recan. It allows to analyze recombination events in viral genomes using genetic distance plotting. The tool is currently available at http://yuriyb.pythonanywhere.com.
+# Guide
 ## Input files
 Input files should be multiple sequence alignments in fasta format (with extenstions: `fasta`, `fas` or `fa`).
 To upload an alignment click: `choose file` button and then `upload your alignment` button. 
@@ -12,6 +9,10 @@ To upload an alignment click: `choose file` button and then `upload your alignme
 Choose the recombinant under study from the list of sequences. Then input values of sliding window size and window shift. Input genome regions, if needed. Choose method of distance calculations which is simple pairwise distance by default. 
 
 Click `plot` button.
+
+## Plot configuration
+When plot is constructed, hover your mouse over the top-right corner of the plot, and the plot control menu will appear. It allows to drag, resize and download it.
+
 
 
 
