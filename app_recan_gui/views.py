@@ -76,6 +76,12 @@ def get_default_plot_settings():
 
 def recan_view(request):
     '''main view function'''
+
+    if not request.session.session_key:
+        request.session.save()
+        #session_id = request.session.session_key
+    SEQ_DATA["session"] = request.session    
+    
     # if user uploads file
     if request.method == "POST" and "btn_submit_alignment" in request.POST \
           and "alignment_file" in request.FILES:
@@ -160,10 +166,7 @@ def recan_view(request):
     else:
         SEQ_DATA["alignment"] = None
 
-    if not request.session.session_key:
-        request.session.save()
-        #session_id = request.session.session_key
-    SEQ_DATA["session"] = request.session    
+    
     return render(request, "base.html", context=SEQ_DATA)
 
 
