@@ -3,7 +3,8 @@ from .simgen import Simgen
 from django.core.files.storage import FileSystemStorage
 import os
 from django.contrib import messages
-
+from .models import SessionData
+from django.contrib.sessions.models import Session
 
 # COMMENT THIS PATH IF UPLOAD ON PYTHONANYWHERE
 PATH_TO_MEDIA_DIR = "./media/"
@@ -80,6 +81,7 @@ def recan_view(request):
     if not request.session.session_key:
         request.session.save()
         #session_id = request.session.session_key
+
     SEQ_DATA["session"] = request.session    
     
     # if user uploads file
