@@ -168,7 +168,8 @@ def recan_view(request):
     else:
         SEQ_DATA["alignment"] = None
 
-    
+    print("----")
+    print(type(SEQ_DATA['plot_div']))
     return render(request, "base.html", context=SEQ_DATA)
 
 
