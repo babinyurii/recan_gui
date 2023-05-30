@@ -21,6 +21,7 @@ media/*
 
 ### venv
 venv*/*
+.venv
 
 ### Django.Python Stack ###
 # Byte-compiled / optimized / DLL files
