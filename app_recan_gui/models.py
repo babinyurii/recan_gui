@@ -15,4 +15,10 @@ class SessionData(models.Model):
         Session,
         on_delete=models.CASCADE
     )
-    file_name = models.CharField(max_length=100, blank=True, null=True)
+    alignment = models.CharField(max_length=100, blank=True, null=True)
+    alignment_with_key = models.CharField(max_length=150, blank=True, null=True)
+    align_len = models.IntegerField(blank=True, null=True)
+    region_start = models.IntegerField(default=0)
+    region_end = models.IntegerField(blank=True, null=True)
+    pot_rec_id = models.CharField(max_length=50, blank=True, null=True)
+    pot_rec_index = models.IntegerField(default=0)
