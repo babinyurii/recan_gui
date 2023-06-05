@@ -207,7 +207,7 @@ class Simgen():
         else:
             return self.ticks_for_x_axis, self.distance_data
         
-        
+    # rename into get_sequences_names_list
     def get_info(self):
         """outputs information about the alignment: 
         index (which is the row number), 

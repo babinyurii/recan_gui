@@ -22,3 +22,7 @@ class SessionData(models.Model):
     region_end = models.IntegerField(blank=True, null=True)
     pot_rec_id = models.CharField(max_length=50, blank=True, null=True)
     pot_rec_index = models.IntegerField(default=0)
+    window_size = models.IntegerField(default=50)
+    window_shift = models.IntegerField(default=25)
+    plot_div = models.TextField(null=True, blank=True, default="")
+    dist_method = models.CharField(default='pdist', max_length=5)

@@ -108,9 +108,22 @@ def recan_view(request):
                 session_data.pot_rec_id = pot_rec_id
                 session_data.pot_rec_index = sim_obj.get_info().index(pot_rec_id)
                 session_data.save()
-                alignment_from_db = SessionData.objects.values('alignment').filter(session_key_id=session_key)[0]
-                SEQ_DATA['file_from_db'] = alignment_from_db['alignment']
-                SEQ_DATA['alignment'] = alignment_from_db['alignment']
+                # put everything from db into context
+               
+                #alignment_from_db = SessionData.objects.values('alignment').filter(session_key_id=session_key)[0]
+                session_data = SessionData.objects.get(session_key_id=session_key)
+                SEQ_DATA['file_from_db'] = session_data.alignment
+                SEQ_DATA['alignment'] = session_data.alignment
+                SEQ_DATA['align_len'] = session_data.align_len
+                SEQ_DATA['region_start'] = session_data.region_start
+                SEQ_DATA['region_end'] = session_data.region_end
+                SEQ_DATA['window_shift'] = session_data.window_shift
+                SEQ_DATA['window_size'] = session_data.window_size
+                SEQ_DATA['sequences'] = sim_obj.get_info()
+                SEQ_DATA['pot_rec_id'] = session_data.pot_rec_id
+                SEQ_DATA['pot_rec_index'] = session_data.pot_rec_index
+
+
             else:
                 session_data = SessionData.objects.get(session_key_id=session_key)
                 session_data.alignment = None
@@ -124,8 +137,56 @@ def recan_view(request):
             session_data.save()
             messages.error(request, "check file extension")
             SEQ_DATA['alignment'] = None
-       
 
+    elif request.method == "POST" and "calc_plot_form" in request.POST:
+        session_key = request.session.session_key
+        session_data = SessionData.objects.get(session_key_id=session_key)
+        input_file_name = session_data.alignment_with_key
+        sim_obj = Simgen(f"{PATH_TO_MEDIA_DIR}{input_file_name}")
+        plot_data = request.POST.dict()
+
+        # take win_size, win_shift and dist_method from plot_data
+        session_data.window_size = int(plot_data.get("window_size"))
+        session_data.window_shift = int(plot_data.get("window_shift"))
+        session_data.dist_method = plot_data.get("dist_method")
+        session_data.pot_rec_id = plot_data.get("pot_rec")
+        session_data.pot_rec_index = sim_obj.get_info().index(plot_data.get("pot_rec"))
+        if int(plot_data.get('region_start')) != session_data.region_start:
+            session_data.region_start = int(plot_data.get('region_start'))
+        if int(plot_data.get('region_end')) != session_data.region_end:
+            session_data.region_end = int(plot_data.get('region_end'))
+        session_data.save()
+
+        #####################################################3
+        # plotting
+        #try:
+        if session_data.region_start and session_data.region_start:
+            plot = sim_obj.simgen(window=session_data.window_size, 
+                                shift=session_data.window_shift, 
+                                pot_rec=session_data.pot_rec_index, 
+                                region=(session_data.region_start, 
+                                        session_data.region_end),
+                                dist=session_data.dist_method)
+        else:
+            plot = sim_obj.simgen(window=session_data.window_size, 
+                                shift=session_data.window_shift, 
+                                pot_rec=session_data.pot_rec_index, 
+                                dist=session_data.dist_method)       
+                        
+        session_data.plot_div = plot
+        session_data.save()
+        ###########################################
+        # put everything into old context to explore
+        SEQ_DATA['plot_div'] = session_data.plot_div
+        SEQ_DATA['pot_rec_id'] = session_data.pot_rec_id
+        SEQ_DATA['pot_rec_index'] = session_data.pot_rec_index
+        SEQ_DATA['dist_method'] = session_data.dist_method
+           
+        # if window is too small, these too error may occur 
+        # depenging on the distance method used
+        #except TypeError or ZeroDivisionError:
+        #    messages.error(request, (f"distance can't by calculated by chosen method:{ SEQ_DATA['dist_method'] }, try to enlarge window size, window shift or both"))
+        #    SEQ_DATA["plot_div"] = None
 
 
 
@@ -138,7 +199,7 @@ def recan_view(request):
     # вью изменяет контекст выше. 
     # и только здесь передает - одна точка передачи
     #####################################33
-
+    
     return render(request, "base.html", context=SEQ_DATA)
 
 
