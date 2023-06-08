@@ -10,7 +10,7 @@ function validateWindow() {
         return false;
     }
 
-    if (region_start > region_end) {
+    if (region_start >= region_end) {
         alert ("selected region start should be less than the region end");
         return false;
     }

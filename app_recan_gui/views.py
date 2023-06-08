@@ -15,7 +15,7 @@ PATH_TO_MEDIA_DIR = "./media/"
 SEQ_DATA = {
     "alignment": None,
     "sequences": [],
-    "pot_rec": None,
+    #"pot_rec": None,
     "pot_rec_id": None,
     "plot_div": None,
     "window_size": None,
@@ -82,7 +82,9 @@ def recan_view(request):
     session_key = SessionData.objects.values(
         'session_key_id').filter(
         session_key_id=session_key)[0]['session_key_id']
-    SEQ_DATA['session_key'] = session_key  
+    
+    ############ OLD SEQ DATA!!!!!!!!!!!!
+    #SEQ_DATA['session_key'] = session_key  
     
     
     if request.method == "POST" and "btn_submit_alignment" in request.POST \
@@ -112,6 +114,9 @@ def recan_view(request):
                
                 #alignment_from_db = SessionData.objects.values('alignment').filter(session_key_id=session_key)[0]
                 session_data = SessionData.objects.get(session_key_id=session_key)
+                
+                ############ OLD SEQ DATA!!!!!!!!!!!!
+                """
                 SEQ_DATA['file_from_db'] = session_data.alignment
                 SEQ_DATA['alignment'] = session_data.alignment
                 SEQ_DATA['align_len'] = session_data.align_len
@@ -122,21 +127,25 @@ def recan_view(request):
                 SEQ_DATA['sequences'] = sim_obj.get_info()
                 SEQ_DATA['pot_rec_id'] = session_data.pot_rec_id
                 SEQ_DATA['pot_rec_index'] = session_data.pot_rec_index
-
+                """
 
             else:
                 session_data = SessionData.objects.get(session_key_id=session_key)
                 session_data.alignment = None
                 session_data.save()
                 messages.error(request, "file contains less than three sequences")
-                SEQ_DATA['alignment'] = None
+
+                ####### OLD SEQ DATA
+                #SEQ_DATA['alignment'] = None
 
         else:
             session_data = SessionData.objects.get(session_key_id=session_key)
             session_data.alignment = None
             session_data.save()
             messages.error(request, "check file extension")
-            SEQ_DATA['alignment'] = None
+
+            ####### OLD SEQ DATA
+            #SEQ_DATA['alignment'] = None
 
     elif request.method == "POST" and "calc_plot_form" in request.POST:
         session_key = request.session.session_key
@@ -177,11 +186,15 @@ def recan_view(request):
         session_data.save()
         ###########################################
         # put everything into old context to explore
+        
+        ####### OLD SEQ DATA
+        """
         SEQ_DATA['plot_div'] = session_data.plot_div
         SEQ_DATA['pot_rec_id'] = session_data.pot_rec_id
         SEQ_DATA['pot_rec_index'] = session_data.pot_rec_index
         SEQ_DATA['dist_method'] = session_data.dist_method
-           
+         """  
+        
         # if window is too small, these too error may occur 
         # depenging on the distance method used
         #except TypeError or ZeroDivisionError:
@@ -198,9 +211,15 @@ def recan_view(request):
     # перед этим закомментировать все обращения к словарю SEQ_DATA
     # вью изменяет контекст выше. 
     # и только здесь передает - одна точка передачи
-    #####################################33
+    #####################################3
     
-    return render(request, "base.html", context=SEQ_DATA)
+    
+    context = SessionData.objects.filter(session_key_id=session_key).values()[0]
+    sim_obj = Simgen(f"{PATH_TO_MEDIA_DIR}{context['alignment_with_key']}")
+    context['sequences'] = sim_obj.get_info()
+    #return render(request, "base.html", context=SEQ_DATA)
+
+    return render(request, "base.html", context=context)
 
 
     
