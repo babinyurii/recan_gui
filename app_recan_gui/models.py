@@ -26,3 +26,4 @@ class SessionData(models.Model):
     window_shift = models.IntegerField(default=25)
     plot_div = models.TextField(null=True, blank=True, default="")
     dist_method = models.CharField(default='pdist', max_length=5)
+
