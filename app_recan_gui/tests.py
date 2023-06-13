@@ -1,12 +1,9 @@
 #from django.test import TestCase
-
 # Create your tests here.
 #import sys
 from Bio import AlignIO
-
 #sys.path.append("..")
 #from recan.simgen import Simgen
-
 from .calc_pairwise_distance import p_distance, estimate_nucleotide_frequencies
 from .rolling_window import RollingWindowOnAlignment
 

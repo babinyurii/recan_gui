@@ -171,8 +171,3 @@ def recan_view(request):
 
 
     
-     #return render(request, "base.html", context=SEQ_DATA)
-
-
-
-    
