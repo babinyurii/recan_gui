@@ -16,11 +16,11 @@ class SessionData(models.Model):
         on_delete=models.CASCADE
     )
     alignment = models.CharField(max_length=100, blank=True, null=True)
-    alignment_with_key = models.CharField(max_length=150, blank=True, null=True)
+    alignment_with_key = models.CharField(max_length=132, blank=True, null=True)
     align_len = models.IntegerField(blank=True, null=True)
     region_start = models.IntegerField(default=0)
     region_end = models.IntegerField(blank=True, null=True)
-    pot_rec_id = models.CharField(max_length=50, blank=True, null=True)
+    pot_rec_id = models.CharField(max_length=100, blank=True, null=True)
     pot_rec_index = models.IntegerField(default=0)
     window_size = models.IntegerField(default=50)
     window_shift = models.IntegerField(default=25)

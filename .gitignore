@@ -16,9 +16,9 @@ media/*
 *.ipynb
 
 ### nucleotide sequences in fasta format
-*.fasta
-*.fas
-*.fa
+./media/*.fasta
+./media/*.fas
+./media/*.fa
 
 ### venv
 venv*/*

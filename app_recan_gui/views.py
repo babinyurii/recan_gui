@@ -70,6 +70,7 @@ def update_session_data_with_default_values(session_key):
     session_data.dist_method = 'pdist'
     session_data.save()
 
+
 def update_session_data_with_start_values(alignment_name_with_key, 
                                           session_key,
                                           alignment_name):
@@ -84,6 +85,7 @@ def update_session_data_with_start_values(alignment_name_with_key,
     session_data.pot_rec_index = sim_obj.get_info().index(pot_rec_id)
     session_data.plot_div = None
     session_data.save()
+
 
 def collect_plot_input_params(sim_obj, session_data, plot_data):
     session_data.window_size = int(plot_data.get("window_size"))
@@ -165,7 +167,6 @@ def recan_view(request):
     if context['alignment_with_key']:
         sim_obj = Simgen(f"{PATH_TO_MEDIA_DIR}{context['alignment_with_key']}")
         context['sequences'] = sim_obj.get_info()
-   
 
     return render(request, "base.html", context=context)
 
