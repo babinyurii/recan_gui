@@ -11,6 +11,13 @@ PATH_TO_MEDIA_DIR = "./media/"
 # UNCOMMENT THIS PATH IF UPLOAD ON PYTHONANYWHERE: 
 # PATH_TO_MEDIA_DIR = "/home/yuriyb/prj_recan_gui/media/"
 
+ERROR_MESSAGES = {'wrong_file_extension': "check file extension",
+                  'less_than_3_seq': "file contains less than three sequences",
+                  'plot_parameters': ("distance can't by calculated "
+                                    "with chosen plot parameters." 
+                                    "Try to enlarge window size, window shift or both."
+                                    "If it doesn't help, change distance calculation method.")
+                                    }
 
 def get_session_key(request):
     if not request.session.session_key:
@@ -142,10 +149,10 @@ def recan_view(request):
                                                       alignment_name)
             else:
                 update_session_data_with_default_values(session_key)
-                messages.error(request, "file contains less than three sequences")
+                messages.error(request, ERROR_MESSAGES["less_than_3_seq"])
         else:
             update_session_data_with_default_values(session_key)
-            messages.error(request, "check file extension")
+            messages.error(request, ERROR_MESSAGES["wrong_file_extension"] )
 
     elif request.method == "POST" and "calc_plot_form" in request.POST:
         session_key = request.session.session_key
@@ -157,9 +164,8 @@ def recan_view(request):
         session_data = collect_plot_input_params(sim_obj, session_data, plot_data)
         try:
             plot_distance(session_data, sim_obj)
-        except TypeError or ZeroDivisionError:
-            messages.error(request, 
-                           (f"distance can't by calculated by chosen method. Try to enlarge window size, window shift or both"))
+        except (TypeError, ZeroDivisionError):
+            messages.error(request, ERROR_MESSAGES["plot_parameters"])
             session_data.plot_div = None
             session_data.save()
     

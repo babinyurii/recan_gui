@@ -30,8 +30,11 @@
             <br>
             <br>
             <button class="btn"  type="submit" name="btn_submit_alignment" id="btn_submit_alignment">Upload your alignment</button>
-           
-            <p id="alignment_name" name="alignment_name">Alignment: {{alignment}}</p>
+            {% if alignment %}
+                <p id="alignment_name" name="alignment_name">file: {{ alignment|truncatechars:25 }}</p>
+                <p id="alignment_length">alignment length: {{ align_len|truncatechars:25 }}</p>
+                <p id="recombinant_chosen">recombinant chosen: {{ pot_rec_id|truncatechars:25 }}</p>
+            {% endif %}
             <!--p id="base file name">{{ base_file_name }}</p-->
         </form>
         {% if messages %}
@@ -134,12 +137,12 @@
                         {% if seq == pot_rec_id %}
                         <li>
                             <input type="radio" id="{{ seq }}" name="pot_rec" value="{{ seq }}" maxlength="30" checked>
-                            <label for="{{ seq }}">{{ seq }}</label>
+                            <label for="{{ seq }}">{{ seq|truncatechars:25  }}</label>
                         </li>
                         {% else %}
                          <li>
                             <input type="radio" id="{{ seq }}" name="pot_rec" value="{{ seq }}" maxlength="30" >
-                            <label for="{{ seq }}">{{ seq }}</label>
+                            <label for="{{ seq }}">{{ seq|truncatechars:25 }}</label>
                         </li>
                         {% endif %}
                     {% endfor %}
@@ -164,7 +167,9 @@
 <!-- ============================== -->
 {% endblock  %}
 check context:
-alignment {{ alignment }}
+alignment: {{ alignment }}
+pot_rec_id: {{ pot_rec_id }}
+pot_rec_index: {{ pot_rec_index }}
 
 </body>
 </html>

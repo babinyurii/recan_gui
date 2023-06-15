@@ -2,6 +2,15 @@
     font-family: Arial, Helvetica, sans-serif;
 }
 
+#alignment_name,
+#alignment_length,
+#recombinant_chosen 
+{
+    font-weight: bold;
+}
+
+
+
 header {
     font-size: large;
     background-color: rgb(255, 222, 173);
