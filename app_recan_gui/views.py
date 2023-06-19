@@ -100,9 +100,15 @@ def collect_plot_input_params(sim_obj, session_data, plot_data):
     session_data.dist_method = plot_data.get("dist_method")
     session_data.pot_rec_id = plot_data.get("pot_rec")
     session_data.pot_rec_index = sim_obj.get_info().index(plot_data.get("pot_rec"))
-    if int(plot_data.get('region_start')) != session_data.region_start:
+    #if int(plot_data.get('region_start')) != session_data.region_start:   
+    if plot_data.get('region_start') == '':
+         session_data.region_start = 0
+    else:
         session_data.region_start = int(plot_data.get('region_start'))
-    if int(plot_data.get('region_end')) != session_data.region_end:
+    #if int(plot_data.get('region_end')) != session_data.region_end:
+    if plot_data.get('region_end') == '':
+        session_data.region_start = sim_obj.alignment_roll_window.align.get_alignment_length()
+    else:
         session_data.region_end = int(plot_data.get('region_end'))
     session_data.save()
 

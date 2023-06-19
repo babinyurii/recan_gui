@@ -13,12 +13,12 @@
 
 header {
     font-size: large;
-    background-color: rgb(255, 222, 173);
-  }
+    /*background-color: rgb(255, 231, 195);*/
+}
 
 .nav_bar {
     list-style-type: none;
-    margin: 0;
+    margin: 10;
     padding: 0;
  
 }
@@ -27,13 +27,42 @@ header {
 .nav_bar_item {
     display: inline;
     padding: 20px;
-    text-decoration: none;
+    font-size: large;
+    font-weight: bold;
+    text-decoration: none; 
 }
+
+
+a:link { 
+    color:rgb(115, 115, 115);
+    text-decoration: none; 
+}
+
+
+a:visited { 
+    color:rgb(115, 115, 115);
+    text-decoration: none; 
+}
+
+
+a:hover { 
+    text-decoration: none;
+    color:rgb(0, 0, 0);
+}
+
+
+a:active { 
+    color:rgb(115, 115, 115);
+    text-decoration: none; 
+}
+
+
 
 #recan_title {
     font-weight: bold;
-    font-size: x-large;
+    font-size: xx-large;
     padding-right: 100px;
+    color: black;
 }
 
 .upload_and_plot_settings {
@@ -69,15 +98,7 @@ header {
     list-style-type: none;
 }
 
-/*
-.sequence_list{
-    border: 2px solid cadetblue;
-}
 
-.plot {
-   border: 2px solid cadetblue;
-}
-*/
 
 /*try to make upload look good*/
 input[type=file]::file-selector-button {
@@ -95,6 +116,12 @@ input[type=file]::file-selector-button:hover {
     background: #0d45a5;
 }
 
+input[type=file]::file-selector-button:active {
+    background: #0c295b;
+  }
+
+
+
 /* here style button submit */
 #btn_submit_alignment{
     border: none;
@@ -108,6 +135,10 @@ input[type=file]::file-selector-button:hover {
 #btn_submit_alignment:hover {
     background: #0d45a5;
 }
+
+#btn_submit_alignment:active {
+    background:  #0c295b;
+  }
 
 
 
@@ -125,7 +156,13 @@ input[type=file]::file-selector-button:hover {
     background: #0d45a5;
 }
 
+#plot_button:active {
+    background:  #0c295b;
+  }
 
+
+
+  
 input[type=number] {
     padding: 10px 20px;
     border-radius: 10px;
