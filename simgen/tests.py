@@ -1,14 +1,16 @@
-#import sys
-from Bio import AlignIO
-#sys.path.append("..")
-#from recan.simgen import Simgen
-from app_recan_gui.calc_pairwise_distance import p_distance, estimate_nucleotide_frequencies
-from app_recan_gui.rolling_window import RollingWindowOnAlignment
+# to run these pytest tests go to the simgen dir and then launch:
+# pytest tests.py
 
+from Bio import AlignIO
+from .calc_pairwise_distance import p_distance, estimate_nucleotide_frequencies
+from .rolling_window import RollingWindowOnAlignment
+
+
+FASTA_DIR = "./fasta_files/"
 
 def test_p_distance():
     
-    align = AlignIO.read("./fasta_files/test_p_dist.fasta", "fasta")
+    align = AlignIO.read(f"{FASTA_DIR}/test_p_dist.fasta", "fasta")
     """
     >s1_ref
     ATGCATGCAT
@@ -38,7 +40,7 @@ def test_p_distance():
     
 
 def test_estimate_nuc_frequency():
-    align = AlignIO.read("./fasta_files/test_nuc_freq.fasta", "fasta")
+    align = AlignIO.read(f"{FASTA_DIR}/test_nuc_freq.fasta", "fasta")
     
     """ sequences in the file 'test_nuc_freq.fastq":
     >s1_A_10
@@ -67,7 +69,7 @@ def test_estimate_nuc_frequency():
 
 def test_sliced_alignment_slices_on_whole_alignment():
     
-    align = RollingWindowOnAlignment("./fasta_files/hbv_C_Bj_Ba.fasta")
+    align = RollingWindowOnAlignment(f"{FASTA_DIR}/hbv_C_Bj_Ba.fasta")
     
     sliced_align = align.roll_window_along_alignment(window_len=500, window_step=500)
     assert len(sliced_align) == 7
@@ -84,7 +86,7 @@ def test_sliced_alignment_slices_on_whole_alignment():
 
 def test_sliced_alignment_slices_on_alignment_region():
     
-    align = RollingWindowOnAlignment("./fasta_files/hbv_C_Bj_Ba.fasta")
+    align = RollingWindowOnAlignment(f"{FASTA_DIR}/hbv_C_Bj_Ba.fasta")
     
     sliced_align = align.roll_window_along_alignment_region(window_len=500, window_step=500, 
                                                      region=(0, 1000))
@@ -101,7 +103,7 @@ def test_sliced_alignment_slices_on_alignment_region():
     
 def test_sliced_alignment_window_borders_whole_alignment():
     
-    align = RollingWindowOnAlignment("./fasta_files/hbv_C_Bj_Ba.fasta")
+    align = RollingWindowOnAlignment(f"{FASTA_DIR}/hbv_C_Bj_Ba.fasta")
     
     sliced_align = align.roll_window_along_alignment(window_len=500, window_step=500)
     
@@ -120,7 +122,7 @@ def test_sliced_alignment_window_borders_whole_alignment():
    
 def test_sliced_alignment_window_borders_alignment_region():
     
-    align = RollingWindowOnAlignment("./fasta_files/hbv_C_Bj_Ba.fasta")
+    align = RollingWindowOnAlignment(f"{FASTA_DIR}/hbv_C_Bj_Ba.fasta")
     
     sliced_align = align.roll_window_along_alignment_region(window_len=500, window_step=250, 
                                                      region=(0, 1000))

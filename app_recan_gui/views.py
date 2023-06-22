@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from .simgen import Simgen
+from simgen.simgen import Simgen
 from django.core.files.storage import FileSystemStorage
 import os
 from django.contrib import messages
