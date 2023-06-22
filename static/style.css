@@ -86,6 +86,7 @@ a:active {
 
 .error_message {
     color: red;
+    font-weight: bold;
 }
 
 
