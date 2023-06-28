@@ -180,7 +180,7 @@ def recan_view(request):
         sim_obj = Simgen(f"{PATH_TO_MEDIA_DIR}{context['alignment_with_key']}")
         context['sequences'] = sim_obj.get_info()
 
-    return render(request, "base.html", context=context)
+    return render(request, "recan.html", context=context)
 
 
     

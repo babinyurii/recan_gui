@@ -57,6 +57,31 @@ a:active {
 }
 
 
+#download_button,
+#download_link {
+    font-weight: bold;
+    color:#0194c1;
+
+}
+
+
+#datasets_description{
+    word-wrap: break-word;
+    width: 50%;
+
+}
+
+#datasets_refs{
+    word-wrap: break-word;
+    width: 50%;
+
+}
+
+a:active { 
+    color:rgb(115, 115, 115);
+    text-decoration: none; 
+}
+
 
 #recan_title {
     font-weight: bold;

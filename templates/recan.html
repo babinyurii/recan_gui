@@ -1,0 +1,150 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<body>
+<div class="upload_and_plot_settings">
+    <!-- upload alignment -->
+        <div class="upload_alignment">
+            <form method="post" enctype="multipart/form-data" name="form_upload_alignment">
+                {% csrf_token %}
+                
+                <input class="btn"  type="file" name="alignment_file" id="alignment_file" required>
+                <br>
+                <br>
+                <button class="btn"  type="submit" name="btn_submit_alignment" id="btn_submit_alignment">Upload your alignment</button>
+                {% if alignment %}
+                    <p id="alignment_name" name="alignment_name">file: {{ alignment|truncatechars:25 }}</p>
+                    <p id="alignment_length">alignment length: {{ align_len|truncatechars:25 }}</p>
+                    <p id="recombinant_chosen">recombinant chosen: {{ pot_rec_id|truncatechars:25 }}</p>
+                {% endif %}
+                <!--p id="base file name">{{ base_file_name }}</p-->
+            </form>
+            {% if messages %}
+                <p>Errors:</p>
+                <ul class="messages">
+                {% for message in messages %}
+                    <li class="error_message">{{ message }}</li>
+                {% endfor %}
+                </ul>
+            {% endif %}
+    
+        </div>
+    <!-- ============================== -->
+    
+    <!-- plotting elements and settings  -->
+        <div class="plot_settings">
+        <form action="#" method="post" name="dist_plot_form" onsubmit="return validateWindow();">
+            {% csrf_token %}
+            <!--window size, shift and region if needed-->
+            <p class="title_bold">plot settings</p>
+            <div class="plot_parameters">
+                <div class="plot_arg">     
+                <label class="plot_label" for="window_size">window size:</label>
+                <input id="window_size" type="number" name="window_size" 
+                    value="{{ window_size }}" min="50" max="{{ align_len }}">
+                 
+                </div>
+                <div class="plot_arg">
+                 <label class="plot_label" for="window_shift">window shift:</label>
+                <input id="window_shift" type="number" name="window_shift" 
+                    value="{{ window_shift }}" min="25" max="{{ align_len }}">
+                   
+                </div>    
+                   
+                <!-- NOTE -->
+                <!--see if value='smth' in region inputs will work with js script which is to save values afte plot is hit-->
+                <div class="plot_arg">
+                 <label class="plot_label" for="region_start">region start:</label>
+                <input type="number" id="region_start" name="region_start" min="0" max="{{ align_len }}" value="{{ region_start }}">
+                   
+                </div>
+                <div class="plot_arg">
+                <label class="plot_label"  for="region_end">region end:</label>
+                <input type="number" id="region_end" name="region_end" min="0" max="{{ align_len }}" value="{{ region_end }}">
+                  
+                </div>    
+            </div>
+                <!--plot button-->
+                <br>
+                {% if alignment %}
+                    <button class="btn" type="submit" id="plot_button" name="calc_plot_form">plot</button>
+                {% else %}
+                    <button class="btn" type="submit" id="plot_button" name="calc_plot_form" disabled>plot</button>
+                {% endif %}
+                
+            </div>
+            
+                <!--choise of distance methods by radiobuttons-->
+            <div class="distance_method">
+                <p class="title_bold">distance calculation method:</p>
+                <ul >
+                <!-- {% for dist in dist_methods %}
+                     <li>
+                        <input type="radio" id="{{ dist }}" name="dist_method" value="{{ dist }}">
+                            <label for="{{ dist }}">"{{ dist }}"label>
+                    </li>
+                    {% endfor %} -->
+                    <li class="distance_buttons">
+                        <input type="radio" id="pdist" name="dist_method" value="pdist" 
+                        {% if dist_method == "pdist" %}checked{% endif %}>
+                            <label for="pdist">pairwise distance</label>
+                    </li>
+                    <li class="distance_buttons">
+                        <input type="radio" id="jcd" name="dist_method" value="jcd"
+                        {% if dist_method == "jcd" %}checked{% endif %}>
+                            <label for="jcd">Jukes-Cantor distance</label>
+                    <li class="distance_buttons">
+                        <input type="radio" id="k2p" name="dist_method" value="k2p"
+                         {% if dist_method == "k2p" %}checked{% endif %}>
+                            <label for="k2p">Kimura 2-parameter distance</label>
+                    </li>
+                    <li class="distance_buttons">
+                        <input type="radio" id="td" name="dist_method" value="td"
+                         {% if dist_method == "td" %}checked{% endif %}>
+                            <label for="td">Tamura distance</label>
+                    </li>
+                </ul>
+            </div>
+    </div>
+    
+    <div class="seq_and_plot">
+            <!-- sequences list and radiobuttons -->
+            <div class="sequence_list">
+               
+                {% if alignment %}
+                <p class="title_bold">choose potential recombinant:</p>
+                    <ol>
+                        {% for seq in sequences %}
+                            <!-- keep checked by user -->
+                            {% if seq == pot_rec_id %}
+                            <li>
+                                <input type="radio" id="{{ seq }}" name="pot_rec" value="{{ seq }}" maxlength="30" checked>
+                                <label for="{{ seq }}">{{ seq|truncatechars:25  }}</label>
+                            </li>
+                            {% else %}
+                             <li>
+                                <input type="radio" id="{{ seq }}" name="pot_rec" value="{{ seq }}" maxlength="30" >
+                                <label for="{{ seq }}">{{ seq|truncatechars:25 }}</label>
+                            </li>
+                            {% endif %}
+                        {% endfor %}
+                    </ol>
+                {% else %}
+                    <p>no alignment uploaded</p>
+                {% endif %}
+    
+    
+                
+            </div>
+        </form>
+    
+        <!-- plotting -->
+       
+        {% if plot_div %}
+        <div class="plot" style="width:1000;height:500">
+            {{ plot_div | safe }}
+        </div>
+        {% endif %}
+    </div>
+</body>
+{% endblock  %}
