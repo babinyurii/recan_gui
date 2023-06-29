@@ -13,14 +13,14 @@ To upload an alignment click: `choose file` button and then `upload your alignme
 When you're happy with your settings hit `plot` button.
 
 ## Plot configuration
-When plot is constructed, hover your mouse over the top-right corner of the plot, and the plot control menu will appear. It allows to drag, resize and download it.
+When the plot is constructed, hover your mouse over the top-right corner of the plot, and the plot control menu will appear. It allows to drag, resize and download the screenshot. The sequences with their color traces are shown above the plot. You can click on any them to hide or show it. You can also double click on any sequnce legend to isolate the single trace or return all the traces to the plot.   
 
 ## Example datasets
 If you didn't use the distance method for virus recombination study before, you can download example datasets and play with them first. Each dataset contains sequences of a particular virus (HBV, HIB, HCV, LSDV, norovirus). Among the other sequences there is a recombinant virus and its major and minor parents in these alignments (except for the file hbv_C_Bj_Ba.fasta, it contains only recombinant and its parents). Minor parents have 'min' ending in their sequence name. Major parents have 'maj' ending. Recombinant sequences are designated with 'rec' ending. All the recombinant viruses included in the articles are described in the articles (see references below). 
 
 
 
-
+## References
 1. Hepatitis B Virus of Genotype B with or without Recombination with Genotype C over the Precore Region plus the Core Gene. Fuminaka Sugauchi et al. JOURNAL OF VIROLOGY, June 2002, p. 5985–5992. 10.1128/JVI.76.12.5985-5992.2002 https://jvi.asm.org/content/76/12/5985
 2. Sprygin A, Babin Y, Pestova Y, Kononova S, Wallace DB, Van Schalkwyk A, et al. (2018) Analysis and insights into recombination signals in lumpy skin disease virus recovered in the field. PLoS ONE 13(12): e0207480. https://doi.org/ 10.1371/journal.pone.0207480
 3. Liitsola, K., Holm K., Bobkov, A., Pokrovsky, V., Smolskaya,T., Leinikki,P., Osmanov,S. and Salminen,M. (2000) An AB recombinant and its parental HIV type 1 strains in the area of the former Soviet Union: low requirements for sequence identity in recombination. UNAIDS Virus Isolation Network. AIDS Res. Hum. Retroviruses, 16, 1047–1053.
