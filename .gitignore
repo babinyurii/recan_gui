@@ -54,3 +54,5 @@ MANIFEST
 
 *.png
 *.PNG
+
+!pictures/*.png

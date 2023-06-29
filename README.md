@@ -13,10 +13,25 @@ To upload an alignment click: `choose file` button and then `upload your alignme
 When you're happy with your settings hit `plot` button.
 
 ## Plot configuration
-When the plot is constructed, hover your mouse over the top-right corner of the plot, and the plot control menu will appear. It allows to drag, resize and download the screenshot. The sequences with their color traces are shown above the plot. You can click on any them to hide or show it. You can also double click on any sequnce legend to isolate the single trace or return all the traces to the plot.   
+When the plot is constructed, hover your mouse over the top-right corner of the plot. It shows the plot control menu. The menu allows to drag, resize the plot and download the screenshot. The sequences with their color traces are shown above the plot. You can click on any of them to hide or show a chosen trace. You can also double click on any sequence legend to isolate the single trace or return all the traces to the plot.   
+
+
+
+
 
 ## Example datasets
 If you didn't use the distance method for virus recombination study before, you can download example datasets and play with them first. Each dataset contains sequences of a particular virus (HBV, HIB, HCV, LSDV, norovirus). Among the other sequences there is a recombinant virus and its major and minor parents in these alignments (except for the file hbv_C_Bj_Ba.fasta, it contains only recombinant and its parents). Minor parents have 'min' ending in their sequence name. Major parents have 'maj' ending. Recombinant sequences are designated with 'rec' ending. All the recombinant viruses included in the articles are described in the articles (see references below). 
+
+Typical recombination events from the example datasets:
+
+Recombination in HIV genome:
+![hiv](https://raw.githubusercontent.com/babinyurii/recan/master/pictures/hiv_rec_kal153.png)
+
+HCV intergenotype recombinant 2k/1b:
+![hcv](https://raw.githubusercontent.com/babinyurii/recan/master/pictures/hcv_2k_1b_rec.png)
+
+Norovirus recombinant isolate:
+![norovirus](https://raw.githubusercontent.com/babinyurii/recan/master/pictures/norovirus_rec.png)
 
 
 
