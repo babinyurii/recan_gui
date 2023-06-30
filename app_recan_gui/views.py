@@ -2,28 +2,29 @@ import os
 from django.contrib import messages
 from django.shortcuts import render
 from django.core.files.storage import FileSystemStorage
-from .models import SessionData
 from simgen.simgen import Simgen
+from .models import SessionData
 
 
 # COMMENT THIS PATH IF UPLOAD ON PYTHONANYWHERE
 PATH_TO_MEDIA_DIR = './media/'
 
-# UNCOMMENT THIS PATH IF UPLOAD ON PYTHONANYWHERE: 
+# UNCOMMENT THIS PATH IF UPLOAD ON PYTHONANYWHERE:
 # PATH_TO_MEDIA_DIR = '/home/yuriyb/prj_recan_gui/media/'
 
 ERROR_MESSAGES = {'wrong_file_extension': "check file extension",
                   'less_than_3_seq': "file contains less than three sequences",
-                  'plot_parameters': ("distance can't by calculated "
-                                    "with chosen plot parameters." 
-                                    "Try to enlarge window size, window shift or both. "
-                                    "If it doesn't help, change distance calculation method.")
-                                    }
+                  'plot_parameters': (
+                      "distance can't by calculated "
+                      "with chosen plot parameters."
+                      "Try to enlarge window size, window shift or both. "
+                      "If it doesn't help, change distance calculation method.")}
+
 
 def get_session_key(request):
     if not request.session.session_key:
         request.session.save()
-        session_key = request.session.session_key   
+        session_key = request.session.session_key
     else:
         session_key = request.session.session_key
     return session_key
@@ -46,7 +47,7 @@ def add_session_key_to_alignment_name(alignment_name, session_key):
 
 
 def save_file_in_media_dir(uploaded_alignment, alignment_name_with_key):
-    """add key to file name, save it 
+    """add key to file name, save it
     """
     fs = FileSystemStorage()
     fs.save(alignment_name_with_key, uploaded_alignment)
@@ -54,7 +55,7 @@ def save_file_in_media_dir(uploaded_alignment, alignment_name_with_key):
 
 def validate_num_of_sequences(file_name):
     '''
-    check if the number of sequences in the uploaded 
+    check if the number of sequences in the uploaded
     aligment is >=  3
     '''
     sim_obj = Simgen(f'{PATH_TO_MEDIA_DIR}{file_name}')
@@ -81,7 +82,7 @@ def update_session_data_with_default_values(session_key):
     session_data.save()
 
 
-def update_session_data_with_start_values(alignment_name_with_key, 
+def update_session_data_with_start_values(alignment_name_with_key,
                                           session_key,
                                           alignment_name):
     sim_obj = Simgen(f'{PATH_TO_MEDIA_DIR}{alignment_name_with_key}')
@@ -102,13 +103,14 @@ def collect_plot_input_params(sim_obj, session_data, plot_data):
     session_data.window_shift = int(plot_data.get('window_shift'))
     session_data.dist_method = plot_data.get('dist_method')
     session_data.pot_rec_id = plot_data.get('pot_rec')
-    session_data.pot_rec_index = sim_obj.get_info().index(plot_data.get('pot_rec'))
-    #if int(plot_data.get('region_start')) != session_data.region_start:   
+    session_data.pot_rec_index = sim_obj.get_info().index(
+        plot_data.get('pot_rec'))
+    # if int(plot_data.get('region_start')) != session_data.region_start:
     if plot_data.get('region_start') == '':
-         session_data.region_start = 0
+        session_data.region_start = 0
     else:
         session_data.region_start = int(plot_data.get('region_start'))
-    #if int(plot_data.get('region_end')) != session_data.region_end:
+    # if int(plot_data.get('region_end')) != session_data.region_end:
     if plot_data.get('region_end') == '':
         session_data.region_start = sim_obj.alignment_roll_window.align.get_alignment_length()
     else:
@@ -120,18 +122,18 @@ def collect_plot_input_params(sim_obj, session_data, plot_data):
 
 def plot_distance(session_data, sim_obj):
     if session_data.region_start and session_data.region_start:
-            plot = sim_obj.simgen(window=session_data.window_size, 
-                                shift=session_data.window_shift, 
-                                pot_rec=session_data.pot_rec_index, 
-                                region=(session_data.region_start, 
-                                        session_data.region_end),
-                                dist=session_data.dist_method)
+        plot = sim_obj.simgen(window=session_data.window_size,
+                              shift=session_data.window_shift,
+                              pot_rec=session_data.pot_rec_index,
+                              region=(session_data.region_start,
+                                      session_data.region_end),
+                              dist=session_data.dist_method)
     else:
-        plot = sim_obj.simgen(window=session_data.window_size, 
-                            shift=session_data.window_shift, 
-                            pot_rec=session_data.pot_rec_index, 
-                            dist=session_data.dist_method)       
-                    
+        plot = sim_obj.simgen(window=session_data.window_size,
+                              shift=session_data.window_shift,
+                              pot_rec=session_data.pot_rec_index,
+                              dist=session_data.dist_method)
+
     session_data.plot_div = plot
     session_data.save()
 
@@ -140,7 +142,7 @@ def recan_view(request):
     '''main view function'''
     session_key = get_session_key(request)
     if request.method == 'POST' and 'btn_submit_alignment' in request.POST \
-          and 'alignment_file' in request.FILES:      
+    and 'alignment_file' in request.FILES:
         session_key = request.session.session_key
         uploaded_alignment = request.FILES['alignment_file']
         alignment_name = uploaded_alignment.name
@@ -148,9 +150,9 @@ def recan_view(request):
         if alignment_name.rsplit('.')[-1] in ['fas', 'fa', 'fasta']:
             clean_media_dir(session_key)
             alignment_name_with_key = add_session_key_to_alignment_name(
-                alignment_name, 
+                alignment_name,
                 session_key)
-            save_file_in_media_dir(uploaded_alignment, 
+            save_file_in_media_dir(uploaded_alignment,
                                    alignment_name_with_key)
             if validate_num_of_sequences(alignment_name_with_key):
                 update_session_data_with_start_values(alignment_name_with_key,
@@ -161,7 +163,7 @@ def recan_view(request):
                 messages.error(request, ERROR_MESSAGES['less_than_3_seq'])
         else:
             update_session_data_with_default_values(session_key)
-            messages.error(request, ERROR_MESSAGES['wrong_file_extension'] )
+            messages.error(request, ERROR_MESSAGES['wrong_file_extension'])
 
     elif request.method == 'POST' and 'calc_plot_form' in request.POST:
         session_key = request.session.session_key
@@ -170,20 +172,20 @@ def recan_view(request):
         sim_obj = Simgen(f'{PATH_TO_MEDIA_DIR}{input_file_name}')
         plot_data = request.POST.dict()
 
-        session_data = collect_plot_input_params(sim_obj, session_data, plot_data)
+        session_data = collect_plot_input_params(sim_obj,
+                                                 session_data,
+                                                 plot_data)
         try:
             plot_distance(session_data, sim_obj)
         except (TypeError, ZeroDivisionError):
             messages.error(request, ERROR_MESSAGES['plot_parameters'])
             session_data.plot_div = None
             session_data.save()
-    
-    context = SessionData.objects.filter(session_key_id=session_key).values()[0]
+
+    context = SessionData.objects.filter(
+        session_key_id=session_key).values()[0]
     if context['alignment_with_key']:
         sim_obj = Simgen(f'{PATH_TO_MEDIA_DIR}{context["alignment_with_key"]}')
         context['sequences'] = sim_obj.get_info()
 
     return render(request, 'recan.html', context=context)
-
-
-    
