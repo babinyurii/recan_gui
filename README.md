@@ -22,7 +22,7 @@ When the plot is constructed, hover your mouse over the top-right corner of the 
 ## Example datasets
 If you didn't use the distance method for virus recombination study before, you can download example datasets and play with them first. Each dataset contains sequences of a particular virus (HBV, HIB, HCV, LSDV, norovirus). Among the other sequences there is a recombinant virus and its major and minor parents in these alignments (except for the file hbv_C_Bj_Ba.fasta, it contains only recombinant and its parents). Minor parents have 'min' ending in their sequence name. Major parents have 'maj' ending. Recombinant sequences are designated with 'rec' ending. All the recombinant viruses included in the articles are described in the articles (see references below). 
 
-Typical recombination events from the example datasets:
+Typical recombination events from the example
 
 Recombination in HIV genome:
 ![hiv](https://raw.githubusercontent.com/babinyurii/recan/master/pictures/hiv_rec_kal153.png)
