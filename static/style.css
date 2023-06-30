@@ -9,8 +9,6 @@
     font-weight: bold;
 }
 
-
-
 header {
     font-size: large;
     /*background-color: rgb(255, 231, 195);*/
@@ -20,9 +18,7 @@ header {
     list-style-type: none;
     margin: 10;
     padding: 0;
- 
 }
-
 
 .nav_bar_item {
     display: inline;
@@ -32,24 +28,20 @@ header {
     text-decoration: none; 
 }
 
-
 a:link { 
     color:rgb(115, 115, 115);
     text-decoration: none; 
 }
-
 
 a:visited { 
     color:rgb(115, 115, 115);
     text-decoration: none; 
 }
 
-
 a:hover { 
     text-decoration: none;
     color:rgb(0, 0, 0);
 }
-
 
 a:active { 
     color:rgb(115, 115, 115);
@@ -61,14 +53,11 @@ a:active {
 #download_link {
     font-weight: bold;
     color:#0194c1;
-
 }
-
 
 #datasets_description{
     word-wrap: break-word;
     width: 50%;
-
 }
 
 #datasets_refs{
@@ -92,12 +81,10 @@ a:active {
 
 .upload_and_plot_settings {
     display: flex;
-  }
+}
 
 .upload_alignment {
-    /*border: 2px solid cadetblue;*/
     flex: 25%;
- 
 }
 
 .plot_settings {
@@ -114,7 +101,6 @@ a:active {
     font-weight: bold;
 }
 
-
 .seq_and_plot {
     display: flex;
 }
@@ -123,8 +109,6 @@ a:active {
 .distance_buttons {
     list-style-type: none;
 }
-
-
 
 /*try to make upload look good*/
 input[type=file]::file-selector-button {
@@ -135,8 +119,7 @@ input[type=file]::file-selector-button {
     color: #fff;
     cursor: pointer;
     margin-top: 10%;
-    
-  }
+}
 
 input[type=file]::file-selector-button:hover {
     background: #0d45a5;
@@ -145,7 +128,6 @@ input[type=file]::file-selector-button:hover {
 input[type=file]::file-selector-button:active {
     background: #0c295b;
   }
-
 
 
 /* here style button submit */
@@ -164,8 +146,7 @@ input[type=file]::file-selector-button:active {
 
 #btn_submit_alignment:active {
     background:  #0c295b;
-  }
-
+}
 
 
 /* here style button plot */
@@ -184,19 +165,14 @@ input[type=file]::file-selector-button:active {
 
 #plot_button:active {
     background:  #0c295b;
-  }
+}
 
-
-
-  
 input[type=number] {
     padding: 10px 20px;
     border-radius: 10px;
     cursor: pointer;
-    width: auto;
-    
-  }
-
+    width: auto; 
+}
 
 .plot_parameters{
     display: grid;
