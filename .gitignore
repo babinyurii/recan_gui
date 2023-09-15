@@ -24,6 +24,9 @@ media/*
 venv*/*
 .venv
 
+# env secrets
+.env
+
 ### Django.Python Stack ###
 # Byte-compiled / optimized / DLL files
 *.py[cod]
