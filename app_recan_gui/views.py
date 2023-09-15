@@ -4,7 +4,7 @@ from django.shortcuts import render
 from django.core.files.storage import FileSystemStorage
 from simgen.simgen import Simgen
 from .models import SessionData
-
+from pages.views import internal_server_error
 
 # COMMENT THIS PATH IF UPLOAD ON PYTHONANYWHERE
 PATH_TO_MEDIA_DIR = './media/'
