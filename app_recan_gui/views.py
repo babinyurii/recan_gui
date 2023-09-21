@@ -168,23 +168,30 @@ def recan_view(request):
         session_key = request.session.session_key
         session_data = SessionData.objects.get(session_key_id=session_key)
         input_file_name = session_data.alignment_with_key
-        sim_obj = Simgen(f'{PATH_TO_MEDIA_DIR}{input_file_name}')
-        plot_data = request.POST.dict()
-
-        session_data = collect_plot_input_params(sim_obj,
+        
+        try:
+            sim_obj = Simgen(f'{PATH_TO_MEDIA_DIR}{input_file_name}')
+            plot_data = request.POST.dict()
+            session_data = collect_plot_input_params(sim_obj,
                                                  session_data,
                                                  plot_data)
-        try:
-            plot_distance(session_data, sim_obj)
-        except (TypeError, ZeroDivisionError):
-            messages.error(request, ERROR_MESSAGES['plot_parameters'])
-            session_data.plot_div = None
-            session_data.save()
+        except FileNotFoundError:
+            update_session_data_with_default_values(session_key)
+
+        else:
+            try:
+                plot_distance(session_data, sim_obj)
+            except (TypeError, ZeroDivisionError):
+                messages.error(request, ERROR_MESSAGES['plot_parameters'])
+                session_data.plot_div = None
+                session_data.save()
 
     context = SessionData.objects.filter(
         session_key_id=session_key).values()[0]
     if context['alignment_with_key']:
-        sim_obj = Simgen(f'{PATH_TO_MEDIA_DIR}{context["alignment_with_key"]}')
-        context['sequences'] = sim_obj.get_info()
-
+        try:
+            sim_obj = Simgen(f'{PATH_TO_MEDIA_DIR}{context["alignment_with_key"]}')
+            context['sequences'] = sim_obj.get_info()
+        except FileNotFoundError:
+            update_session_data_with_default_values(session_key)
     return render(request, 'recan.html', context=context)
