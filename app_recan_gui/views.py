@@ -139,8 +139,24 @@ def plot_distance(session_data, sim_obj):
 
 def recan_view(request):
     '''main view function'''
-    session_key = get_session_key(request)
-    if request.method == 'POST' and 'btn_submit_alignment' in request.POST \
+    if request.method == 'GET':
+        session_key = get_session_key(request)
+        context = SessionData.objects.filter(
+            session_key_id=session_key).values()[0]
+        if context['alignment_with_key']:
+            try:
+                sim_obj = Simgen(f'{PATH_TO_MEDIA_DIR}{context["alignment_with_key"]}')
+                context['sequences'] = sim_obj.get_info()
+            except FileNotFoundError:
+                update_session_data_with_default_values(session_key)
+                context = SessionData.objects.filter(
+                    session_key_id=session_key).values()[0]
+        return render(request, 'recan.html', context=context)
+
+
+        
+        
+    elif request.method == 'POST' and 'btn_submit_alignment' in request.POST \
     and 'alignment_file' in request.FILES:
         session_key = request.session.session_key
         uploaded_alignment = request.FILES['alignment_file']
@@ -163,6 +179,21 @@ def recan_view(request):
         else:
             update_session_data_with_default_values(session_key)
             messages.error(request, ERROR_MESSAGES['wrong_file_extension'])
+        
+        
+        context = SessionData.objects.filter(
+            session_key_id=session_key).values()[0]
+        if context['alignment_with_key']:
+            try:
+                sim_obj = Simgen(f'{PATH_TO_MEDIA_DIR}{context["alignment_with_key"]}')
+                context['sequences'] = sim_obj.get_info()
+            except FileNotFoundError:
+                update_session_data_with_default_values(session_key)
+                context = SessionData.objects.filter(
+                    session_key_id=session_key).values()[0]
+        return render(request, 'recan.html', context=context)
+
+
 
     elif request.method == 'POST' and 'calc_plot_form' in request.POST:
         session_key = request.session.session_key
@@ -177,7 +208,6 @@ def recan_view(request):
                                                  plot_data)
         except FileNotFoundError:
             update_session_data_with_default_values(session_key)
-
         else:
             try:
                 plot_distance(session_data, sim_obj)
@@ -186,12 +216,16 @@ def recan_view(request):
                 session_data.plot_div = None
                 session_data.save()
 
-    context = SessionData.objects.filter(
-        session_key_id=session_key).values()[0]
-    if context['alignment_with_key']:
-        try:
-            sim_obj = Simgen(f'{PATH_TO_MEDIA_DIR}{context["alignment_with_key"]}')
-            context['sequences'] = sim_obj.get_info()
-        except FileNotFoundError:
-            update_session_data_with_default_values(session_key)
-    return render(request, 'recan.html', context=context)
+
+
+        context = SessionData.objects.filter(
+            session_key_id=session_key).values()[0]
+        if context['alignment_with_key']:
+            try:
+                sim_obj = Simgen(f'{PATH_TO_MEDIA_DIR}{context["alignment_with_key"]}')
+                context['sequences'] = sim_obj.get_info()
+            except FileNotFoundError:
+                update_session_data_with_default_values(session_key)
+                context = SessionData.objects.filter(
+                    session_key_id=session_key).values()[0]
+        return render(request, 'recan.html', context=context)
