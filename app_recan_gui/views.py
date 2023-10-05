@@ -4,6 +4,8 @@ from django.shortcuts import render
 from django.core.files.storage import FileSystemStorage
 from simgen.simgen import Simgen
 from .models import SessionData
+from django.forms import model_to_dict
+from django.shortcuts import get_object_or_404
 
 # COMMENT THIS PATH IF UPLOAD ON PYTHONANYWHERE
 PATH_TO_MEDIA_DIR = './media/'
@@ -137,31 +139,26 @@ def plot_distance(session_data, sim_obj):
     session_data.save()
 
 
+def get_context_from_db(session_key):
+    context = model_to_dict(get_object_or_404(SessionData, session_key=session_key))
+    if context["alignment_with_key"]:
+        try:
+            sim_obj = Simgen(f'{PATH_TO_MEDIA_DIR}{context["alignment_with_key"]}')
+            context['sequences'] = sim_obj.get_info()
+        except FileNotFoundError:
+            update_session_data_with_default_values(session_key)
+            context = model_to_dict(get_object_or_404(SessionData, session_key=session_key))
+    return context
+
 def recan_view(request):
     '''main view function'''
     if request.method == 'GET':
         session_key = get_session_key(request)
-        context = SessionData.objects.filter(
-            session_key_id=session_key).values()[0]
-        # from django.forms.models import model_to_dict
-        #    model_to_dict(instance) 
-        # https://stackoverflow.com/questions/21925671/convert-django-model-object-to-dict-with-all-of-the-fields-intact
-        if context["alignment_with_key"]:
-            try:
-                sim_obj = Simgen(f'{PATH_TO_MEDIA_DIR}{context["alignment_with_key"]}')
-                context['sequences'] = sim_obj.get_info()
-            except FileNotFoundError:
-                update_session_data_with_default_values(session_key)
-                context = SessionData.objects.filter(
-                    session_key_id=session_key).values()[0]
-                #context = SessionData.objects.get(session_key=session_key)
+        context = get_context_from_db(session_key)
         return render(request, 'recan.html', context=context)
-
-
-        
         
     elif request.method == 'POST' and 'btn_submit_alignment' in request.POST \
-    and 'alignment_file' in request.FILES:
+        and 'alignment_file' in request.FILES:
         session_key = request.session.session_key
         uploaded_alignment = request.FILES['alignment_file']
         alignment_name = uploaded_alignment.name
@@ -183,18 +180,7 @@ def recan_view(request):
         else:
             update_session_data_with_default_values(session_key)
             messages.error(request, ERROR_MESSAGES['wrong_file_extension'])
-        
-        
-        context = SessionData.objects.filter(
-            session_key_id=session_key).values()[0]
-        if context['alignment_with_key']:
-            try:
-                sim_obj = Simgen(f'{PATH_TO_MEDIA_DIR}{context["alignment_with_key"]}')
-                context['sequences'] = sim_obj.get_info()
-            except FileNotFoundError:
-                update_session_data_with_default_values(session_key)
-                context = SessionData.objects.filter(
-                    session_key_id=session_key).values()[0]
+        context = get_context_from_db(session_key)
         return render(request, 'recan.html', context=context)
 
 
@@ -220,16 +206,5 @@ def recan_view(request):
                 session_data.plot_div = None
                 session_data.save()
 
-
-
-        context = SessionData.objects.filter(
-            session_key_id=session_key).values()[0]
-        if context['alignment_with_key']:
-            try:
-                sim_obj = Simgen(f'{PATH_TO_MEDIA_DIR}{context["alignment_with_key"]}')
-                context['sequences'] = sim_obj.get_info()
-            except FileNotFoundError:
-                update_session_data_with_default_values(session_key)
-                context = SessionData.objects.filter(
-                    session_key_id=session_key).values()[0]
+        context = get_context_from_db(session_key)
         return render(request, 'recan.html', context=context)
