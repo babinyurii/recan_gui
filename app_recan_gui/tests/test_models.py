@@ -1,7 +1,10 @@
 from django.test import TestCase, Client
 from django.urls import reverse
 from app_recan_gui.models import SessionData
- 
+import os
+
+TESTDATA_FILENAME = os.path.join(os.path.dirname(__file__), 'hiv.fasta')
+
 
 class SessionDataTest(TestCase):
 
@@ -11,6 +14,7 @@ class SessionDataTest(TestCase):
         cls.client = Client()
         cls.session = cls.client.session
         cls.session.save()
+
 
 
     def test_alignment_len_max_len_value(self):
@@ -62,3 +66,11 @@ class SessionDataTest(TestCase):
         session_data = SessionData.objects.get(session_key_id=self.session.session_key)
         dist_method_max_len = session_data._meta.get_field('dist_method').max_length
         self.assertEqual(dist_method_max_len, 5)
+
+
+    #def test_upload(self):
+    #    url = reverse('recan_view')
+    #     with open(TESTDATA_FILENAME) as f:
+    #        post_data = {'alignment_file': f}
+    #        self.clien.post(url, post_data)
+    #        #self.client.post(url, {'attachment': f})

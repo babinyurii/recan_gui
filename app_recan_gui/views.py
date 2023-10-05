@@ -143,7 +143,10 @@ def recan_view(request):
         session_key = get_session_key(request)
         context = SessionData.objects.filter(
             session_key_id=session_key).values()[0]
-        if context['alignment_with_key']:
+        # from django.forms.models import model_to_dict
+        #    model_to_dict(instance) 
+        # https://stackoverflow.com/questions/21925671/convert-django-model-object-to-dict-with-all-of-the-fields-intact
+        if context["alignment_with_key"]:
             try:
                 sim_obj = Simgen(f'{PATH_TO_MEDIA_DIR}{context["alignment_with_key"]}')
                 context['sequences'] = sim_obj.get_info()
@@ -151,6 +154,7 @@ def recan_view(request):
                 update_session_data_with_default_values(session_key)
                 context = SessionData.objects.filter(
                     session_key_id=session_key).values()[0]
+                #context = SessionData.objects.get(session_key=session_key)
         return render(request, 'recan.html', context=context)
 
 
