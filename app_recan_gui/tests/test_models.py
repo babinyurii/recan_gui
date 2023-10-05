@@ -68,9 +68,13 @@ class SessionDataTest(TestCase):
         self.assertEqual(dist_method_max_len, 5)
 
 
-    #def test_upload(self):
-    #    url = reverse('recan_view')
-    #     with open(TESTDATA_FILENAME) as f:
-    #        post_data = {'alignment_file': f}
-    #        self.clien.post(url, post_data)
-    #        #self.client.post(url, {'attachment': f})
+    def test_upload(self):
+        url = reverse('recan_view')
+        with open(TESTDATA_FILENAME) as f:
+            post_data = {'alignment_file': f, 'btn_submit_alignment':[]}
+            #print(self.client.request)
+            #print('from test: self.clien.session.session_key: ', self.client.session.session_key)
+            self.client.session.session_key # when you access session key, it works in the test, otherwise doesn't
+            response = self.client.post(url, post_data)
+            self.assertEqual(response.status_code, 200) 
+            #self.client.post(url, {'attachment': f})

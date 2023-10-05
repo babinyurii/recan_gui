@@ -150,21 +150,32 @@ def get_context_from_db(session_key):
             context = model_to_dict(get_object_or_404(SessionData, session_key=session_key))
     return context
 
+
 def recan_view(request):
     '''main view function'''
     if request.method == 'GET':
+        print('-------------------')
+        print('request GET:')
+        print(request)
         session_key = get_session_key(request)
         context = get_context_from_db(session_key)
         return render(request, 'recan.html', context=context)
-        
-    elif request.method == 'POST' and 'btn_submit_alignment' in request.POST \
-        and 'alignment_file' in request.FILES:
+    #and 'btn_submit_alignment' in request.POST 
+    elif request.method == 'POST' and 'alignment_file' in request.FILES:
+        print('-------------------')
+        print('request POST file upload:')
+        for i in dir(request):
+            print(i)
+        print(request.POST)
+        print(request.FILES)
         session_key = request.session.session_key
         uploaded_alignment = request.FILES['alignment_file']
         alignment_name = uploaded_alignment.name
 
         if alignment_name.rsplit('.')[-1] in ['fas', 'fa', 'fasta']:
             clean_media_dir(session_key)
+            print('align name: ', alignment_name)
+            print('session key: ', session_key)
             alignment_name_with_key = add_session_key_to_alignment_name(
                 alignment_name,
                 session_key)
@@ -186,6 +197,13 @@ def recan_view(request):
 
 
     elif request.method == 'POST' and 'calc_plot_form' in request.POST:
+        print('-------------------')
+        print('request POST plotting:')
+        print(request)
+        for i in dir(request):
+            print(i)
+        print(request.POST)
+        print(request.FILES)
         session_key = request.session.session_key
         session_data = SessionData.objects.get(session_key_id=session_key)
         input_file_name = session_data.alignment_with_key
