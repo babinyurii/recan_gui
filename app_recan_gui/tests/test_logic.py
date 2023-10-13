@@ -10,7 +10,7 @@ TESTDATA_FILENAME = os.path.join(os.path.dirname(__file__), 'hiv.fasta')
 TEST_FILE_TWO_SEQ = os.path.join(os.path.dirname(__file__), 'hiv_two_seq.fasta')
 TEST_FILE_WRONG_EXTENSION = os.path.join(os.path.dirname(__file__), 'hiv_wrong_ext.txt')
 
-class Test1(TestCase):
+class TestFileUploadAndPlotCreation(TestCase):
 
 
     @classmethod
