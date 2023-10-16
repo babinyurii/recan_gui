@@ -6,9 +6,10 @@ from simgen.simgen import Simgen
 from .models import SessionData
 from django.forms import model_to_dict
 from django.shortcuts import get_object_or_404
+from django.conf import settings
 
 # COMMENT THIS PATH IF UPLOAD ON PYTHONANYWHERE
-PATH_TO_MEDIA_DIR = './media/'
+#PATH_TO_MEDIA_DIR = './media/'
 
 # UNCOMMENT THIS PATH IF UPLOAD ON PYTHONANYWHERE:
 # PATH_TO_MEDIA_DIR = '/home/yuriyb/prj_recan_gui/media/'
@@ -35,11 +36,11 @@ def clean_media_dir(session_key):
     """remove files from media dir with
     current session key in their name"""
 
-    save_dir = os.listdir(f'{PATH_TO_MEDIA_DIR}')
+    save_dir = os.listdir(f'{settings.MEDIA_ROOT}')
     if not len(save_dir) == 0:
         for file in save_dir:
             if file.rsplit('.', 1)[0].rsplit('_', 1)[1] == session_key:
-                os.remove(f'{PATH_TO_MEDIA_DIR}{file}')
+                os.remove(f'{settings.MEDIA_ROOT}/{file}')
 
 
 def add_session_key_to_alignment_name(alignment_name, session_key):
@@ -59,7 +60,7 @@ def validate_num_of_sequences(file_name):
     check if the number of sequences in the uploaded
     aligment is >=  3
     '''
-    sim_obj = Simgen(f'{PATH_TO_MEDIA_DIR}{file_name}')
+    sim_obj = Simgen(f'{settings.MEDIA_ROOT}/{file_name}')
     sequences_list = sim_obj.get_info()
     if len(sequences_list) >= 3:
         return True
@@ -86,7 +87,7 @@ def update_session_data_with_default_values(session_key):
 def update_session_data_with_start_values(alignment_name_with_key,
                                           session_key,
                                           alignment_name):
-    sim_obj = Simgen(f'{PATH_TO_MEDIA_DIR}{alignment_name_with_key}')
+    sim_obj = Simgen(f'{settings.MEDIA_ROOT}/{alignment_name_with_key}')
     session_data = SessionData.objects.get(session_key_id=session_key)
     session_data.alignment = alignment_name
     session_data.alignment_with_key = alignment_name_with_key
@@ -143,7 +144,7 @@ def get_context_from_db(session_key):
     context = model_to_dict(get_object_or_404(SessionData, session_key=session_key))
     if context["alignment_with_key"]:
         try:
-            sim_obj = Simgen(f'{PATH_TO_MEDIA_DIR}{context["alignment_with_key"]}')
+            sim_obj = Simgen(f'{settings.MEDIA_ROOT}/{context["alignment_with_key"]}')
             context['sequences'] = sim_obj.get_info()
         except FileNotFoundError:
             update_session_data_with_default_values(session_key)
@@ -209,7 +210,7 @@ def recan_view(request):
         input_file_name = session_data.alignment_with_key
         
         try:
-            sim_obj = Simgen(f'{PATH_TO_MEDIA_DIR}{input_file_name}')
+            sim_obj = Simgen(f'{settings.MEDIA_ROOT}/{input_file_name}')
             plot_data = request.POST.dict()
             session_data = collect_plot_input_params(sim_obj,
                                                  session_data,

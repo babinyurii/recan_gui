@@ -133,6 +133,11 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # for file uploads
 MEDIA_URL = "/media/"
+
+# comment to deploy
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
+
+# uncomment to deploy
+#MEDIA_ROOT = '/home/yuriyb/prj_recan_gui/media/'
 
 SESSION_COOKIE_AGE = (60 * 60) * 24
