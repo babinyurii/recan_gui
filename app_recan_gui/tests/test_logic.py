@@ -19,6 +19,14 @@ class TestFileUploadAndPlotCreation(TestCase):
         #cls.session = cls.client.session
         #cls.session.save()
 
+    def upload_file(self, test_file):
+        self.client.session.session_key # when you access session key, it works in the test, otherwise doesn't
+        url = reverse('recan_view')
+        with open(test_file) as f:
+            post_data = {'alignment_file': f, 'btn_submit_alignment':[]}
+            response = self.client.post(url, post_data)
+        return response
+
     def test_get_recan_session_data_created(self):
         response = self.client.get(reverse('recan_view'))
         self.assertEqual(response.status_code, 200)
@@ -28,12 +36,9 @@ class TestFileUploadAndPlotCreation(TestCase):
 
     
     def test_valid_file_upload_and_start_data_session_values_after_upload(self):
-        self.client.session.session_key # when you access session key, it works in the test, otherwise doesn't
-        url = reverse('recan_view')
-        with open(TESTDATA_FILENAME) as f:
-            post_data = {'alignment_file': f, 'btn_submit_alignment':[]}     
-            response = self.client.post(url, post_data)
-            self.assertEqual(response.status_code, 200) 
+             
+        response = self.upload_file(TESTDATA_FILENAME)
+        self.assertEqual(response.status_code, 200) 
 
         self.assertEqual(SessionData.objects.count(), 1)
         self.assertContains(response, 'AF193276.1_KAL153_rec')
@@ -53,24 +58,16 @@ class TestFileUploadAndPlotCreation(TestCase):
         self.assertEqual(session_data_record.alignment_with_key, 'hiv' '_' + self.client.session.session_key + '.fasta')
 
     def test_upload_invalid_file_with_less_than_three_sequences(self):
-        self.client.session.session_key # when you access session key, it works in the test, otherwise doesn't
-        url = reverse('recan_view')
-        with open(TEST_FILE_TWO_SEQ) as f:
-            post_data = {'alignment_file': f, 'btn_submit_alignment':[]}     
-            response = self.client.post(url, post_data)
-            self.assertEqual(response.status_code, 200) 
-            self.assertContains(response, ERROR_MESSAGES['less_than_3_seq'])
-            session_data_record = SessionData.objects.get(session_key=self.client.session.session_key)
-            self.assertEqual(session_data_record.alignment, None)
-            self.assertEqual(session_data_record.alignment_with_key, None)
+        response = self.upload_file(test_file=TEST_FILE_TWO_SEQ)
+        self.assertEqual(response.status_code, 200) 
+        self.assertContains(response, ERROR_MESSAGES['less_than_3_seq'])
+        session_data_record = SessionData.objects.get(session_key=self.client.session.session_key)
+        self.assertEqual(session_data_record.alignment, None)
+        self.assertEqual(session_data_record.alignment_with_key, None)
 
 
     def test_upload_invalid_file_with_wrong_extension(self):
-        self.client.session.session_key # when you access session key, it works in the test, otherwise doesn't
-        url = reverse('recan_view')
-        with open(TEST_FILE_WRONG_EXTENSION) as f:
-            post_data = {'alignment_file': f, 'btn_submit_alignment':[]}     
-            response = self.client.post(url, post_data)
+            response = self.upload_file(TEST_FILE_WRONG_EXTENSION)
             self.assertEqual(response.status_code, 200) 
             self.assertContains(response, ERROR_MESSAGES['wrong_file_extension'])
             session_data_record = SessionData.objects.get(session_key=self.client.session.session_key)
@@ -79,18 +76,17 @@ class TestFileUploadAndPlotCreation(TestCase):
 
 
     def test_plot_with_default_input_params(self):
-        self.client.session.session_key # when you access session key, it works in the test, otherwise doesn't
         url = reverse('recan_view')
-        with open(TESTDATA_FILENAME) as f:
-            post_data = {'alignment_file': f, 'btn_submit_alignment':[]}     
-            response = self.client.post(url, post_data)
-            self.assertEqual(response.status_code, 200)
+        
+        response = self.upload_file(TESTDATA_FILENAME)
+        self.assertEqual(response.status_code, 200)
         self.assertEqual(SessionData.objects.count(), 1)
 
-
+        # TODO here make method to send plot data and plot if needed
         post_data = {'window_size': ['50'], 'window_shift': ['25'], 'region_start': ['0'], 'region_end': ['3135'], 
         'calc_plot_form': [''], 'dist_method': ['pdist'], 'pot_rec': ['AF193276.1_KAL153_rec']}
         response = self.client.post(url, post_data)
+        ################################################
         self.assertEqual(SessionData.objects.count(), 1)
         self.assertEqual(response.status_code, 200)
         returned_basic_input_params = ['file: hiv.fasta', 'alignment length: 3135', 'recombinant chosen: AF193276.1_KAL153_rec', ]
