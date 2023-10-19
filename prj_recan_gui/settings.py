@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'app_recan_gui',
     'pages.apps.PagesConfig',
+    'simgen',
 ]
 
 MIDDLEWARE = [
