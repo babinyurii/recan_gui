@@ -5,13 +5,12 @@ import unittest
 import os
 
 
-INPUT_FILE_P_DIST = os.path.join(os.path.dirname(__file__), 'test_p_dist.fasta')
-INPUT_FILE_NUC_FREQ = os.path.join(os.path.dirname(__file__), 'test_nuc_freq.fasta')
-INPUT_FILE_HBV_C_Bj_Ba = os.path.join(os.path.dirname(__file__), 'hbv_C_Bj_Ba.fasta')
+INPUT_FILE_P_DIST = os.path.join(os.path.dirname(__file__), './fasta_files/test_p_dist.fasta')
+INPUT_FILE_NUC_FREQ = os.path.join(os.path.dirname(__file__), './fasta_files/test_nuc_freq.fasta')
+INPUT_FILE_HBV_C_Bj_Ba = os.path.join(os.path.dirname(__file__), './fasta_files/hbv_C_Bj_Ba.fasta')
 
 
 class SimpleTest(unittest.TestCase):
-    FAST_DIR = "./fasta_files/"
 
     def test_p_distance(self):
         

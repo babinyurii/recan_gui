@@ -6,9 +6,9 @@ from app_recan_gui.models import SessionData
 from app_recan_gui.views import ERROR_MESSAGES
 
 
-VALID_INPUT_FILE = os.path.join(os.path.dirname(__file__), 'hiv.fasta')
-INVALID_INPUT_FILE_TWO_SEQ = os.path.join(os.path.dirname(__file__), 'hiv_two_seq.fasta')
-INVALID_INPUT_FILE_WRONG_EXTENSION = os.path.join(os.path.dirname(__file__), 'hiv_wrong_ext.txt')
+VALID_INPUT_FILE = os.path.join(os.path.dirname(__file__), './input_files/hiv.fasta')
+INVALID_INPUT_FILE_TWO_SEQ = os.path.join(os.path.dirname(__file__), './input_files/hiv_two_seq.fasta')
+INVALID_INPUT_FILE_WRONG_EXTENSION = os.path.join(os.path.dirname(__file__), './input_files/hiv_wrong_ext.txt')
 
 class TestFileUploadAndPlotCreation(TestCase):
 
