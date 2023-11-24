@@ -147,16 +147,18 @@ def get_context_from_db(session_key):
 
 
 def get_session_key(request):
+    """return session key, if it does not exist create new one.
+    if key exists but db record is 
+    somehow deleted, create a new session, 
+    """
     if not request.session.session_key:
         request.session.save()
-        session_key = request.session.session_key
-    else:
-        session_key = request.session.session_key
-        if not Session.objects.filter(session_key=session_key).exists():
-            request.session.create()
-            request.session.save()
-            session_key = request.session.session_key
-    return session_key
+        return request.session.session_key
+    if not Session.objects.filter(
+        session_key=request.session.session_key).exists():
+        request.session.create()
+        request.session.save()
+    return request.session.session_key
 
 
 def recan_view(request):
