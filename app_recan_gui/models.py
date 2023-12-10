@@ -12,7 +12,12 @@ def create_session_data(sender, instance, created, **kwargs):
 
 
 def save_file(instance, filename):
-    return "{0}_{1}".format(filename, instance.session_key)
+
+    filename, file_ext = filename.rsplit('.', 1)
+
+    return "{0}_{1}.{2}".format(filename, 
+                                instance.session_key,
+                                file_ext)
 
 
 class SessionData(models.Model):
