@@ -10,6 +10,11 @@ def create_session_data(sender, instance, created, **kwargs):
         SessionData.objects.create(session_key=instance)
 
 
+
+def save_file(instance, filename):
+    return "{0}_{1}".format(filename, instance.session_key)
+
+
 class SessionData(models.Model):
     session_key = models.OneToOneField(
         Session,
@@ -26,4 +31,5 @@ class SessionData(models.Model):
     window_shift = models.IntegerField(default=25)
     plot_div = models.TextField(null=True, blank=True, default="")
     dist_method = models.CharField(default='pdist', max_length=5)
+    align_file = models.FileField(upload_to=save_file, default=None, null=True)
 

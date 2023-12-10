@@ -178,8 +178,11 @@ def recan_view(request):
             alignment_name_with_key = add_session_key_to_alignment_name(
                 alignment_name,
                 session_key)
-            save_file_in_media_dir(uploaded_alignment,
-                                   alignment_name_with_key)
+            #save_file_in_media_dir(uploaded_alignment,
+            #                       alignment_name_with_key)
+            session_data_obj = SessionData.objects.get(session_key=session_key)
+            session_data_obj.align_file = uploaded_alignment
+            session_data_obj.save()
             if validate_num_of_sequences(alignment_name_with_key):
                 update_session_data_with_start_values(alignment_name_with_key,
                                                       session_key,
