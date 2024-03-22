@@ -147,16 +147,18 @@ def get_context_from_db(session_key):
 
 
 def get_session_key(request):
+    """return session key, if it does not exist create new one.
+    if key exists but db record is 
+    somehow deleted, create a new session, 
+    """
     if not request.session.session_key:
         request.session.save()
-        session_key = request.session.session_key
-    else:
-        session_key = request.session.session_key
-        if not Session.objects.filter(session_key=session_key).exists():
-            request.session.create()
-            request.session.save()
-            session_key = request.session.session_key
-    return session_key
+        return request.session.session_key
+    if not Session.objects.filter(
+        session_key=request.session.session_key).exists():
+        request.session.create()
+        request.session.save()
+    return request.session.session_key
 
 
 def recan_view(request):
@@ -176,8 +178,11 @@ def recan_view(request):
             alignment_name_with_key = add_session_key_to_alignment_name(
                 alignment_name,
                 session_key)
-            save_file_in_media_dir(uploaded_alignment,
-                                   alignment_name_with_key)
+            #save_file_in_media_dir(uploaded_alignment,
+            #                       alignment_name_with_key)
+            session_data_obj = SessionData.objects.get(session_key=session_key)
+            session_data_obj.align_file = uploaded_alignment
+            session_data_obj.save()
             if validate_num_of_sequences(alignment_name_with_key):
                 update_session_data_with_start_values(alignment_name_with_key,
                                                       session_key,

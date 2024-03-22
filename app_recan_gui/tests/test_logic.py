@@ -4,6 +4,7 @@ from app_recan_gui.models import SessionData
 import os
 from app_recan_gui.models import SessionData
 from app_recan_gui.views import ERROR_MESSAGES
+from django.contrib.sessions.models import Session
 
 
 VALID_INPUT_FILE = os.path.join(os.path.dirname(__file__), './input_files/hiv.fasta')
@@ -67,12 +68,12 @@ class TestFileUploadAndPlotCreation(TestCase):
 
 
     def test_upload_invalid_file_with_wrong_extension(self):
-            response = self.upload_file(INVALID_INPUT_FILE_WRONG_EXTENSION)
-            self.assertEqual(response.status_code, 200) 
-            self.assertContains(response, ERROR_MESSAGES['wrong_file_extension'])
-            session_data_record = SessionData.objects.get(session_key=self.client.session.session_key)
-            self.assertEqual(session_data_record.alignment, None)
-            self.assertEqual(session_data_record.alignment_with_key, None)
+        response = self.upload_file(INVALID_INPUT_FILE_WRONG_EXTENSION)
+        self.assertEqual(response.status_code, 200) 
+        self.assertContains(response, ERROR_MESSAGES['wrong_file_extension'])
+        session_data_record = SessionData.objects.get(session_key=self.client.session.session_key)
+        self.assertEqual(session_data_record.alignment, None)
+        self.assertEqual(session_data_record.alignment_with_key, None)
 
 
     def test_plot_with_default_input_params(self):
@@ -120,6 +121,42 @@ class TestFileUploadAndPlotCreation(TestCase):
         self.assertEqual(session_data_record.window_size, 100)
         self.assertEqual(session_data_record.dist_method, 'jcd')
         self.assertEqual(session_data_record.alignment_with_key, 'hiv' '_' + self.client.session.session_key + '.fasta')
+
+
+
+class TestSessionKey(TestCase):
+
+    @classmethod
+    def setUpTestData(cls):
+        cls.client = Client()
+        cls.url = reverse('recan_view')
+       
+
+    def test_session_and_sessiondata_saved(self):
+        session_key = self.client.session.session_key # when you access session key, it works in the test, otherwise doesn't
+        response = self.client.get(self.url)
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue(Session.objects.filter(session_key=session_key).exists())
+        self.assertTrue(SessionData.objects.filter(session_key=session_key).exists())
+
+    def test_session_is_created_if_record_is_deleted(self):
+        session_key = self.client.session.session_key
+        response = self.client.get(self.url)
+        session_obj = Session.objects.get(session_key=session_key)
+        session_obj.delete()
+        self.assertEqual(Session.objects.count(), 0)
+        response = self.client.get(self.url)
+        self.assertEqual(Session.objects.count(), 1)
+        self.assertNotEqual(session_key, self.client.session.session_key)
+        self.assertTrue(Session.objects.filter(session_key=self.client.session.session_key).exists())        
+        
+
+
+
+        
+
+    
+
 
     
 
