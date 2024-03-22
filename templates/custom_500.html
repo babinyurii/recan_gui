@@ -3,7 +3,12 @@
 {% include 'header.html' %} 
 {% block content %}
   <h1>error 500 (Internal Server Error) </h1>
-  <p>1. <a href="{% url 'recan_view' %}">Try to return to the main page</a></p>
+  <p> 1. <a href="{% url 'recan_view' %}">Try to return to the main page</a></p>
   <p> 2. If it doesn't help, check if cookies are enabled in your browser. We use cookies to track and store your uploaded files.</p>
-  <p> 3. If nothing helps, <a href="https://github.com/babinyurii/recan_gui/issues"> you can report a bug.</a></p>
+  <p> 3. Take a look at your input files to see if their format is ok. The most common mistakes which cause troubles are:</p>
+  <ul>
+    <li>sequences are not the same length</li>
+    <li>there are blank lines in the file</li>
+  </ul>
+  <p> 4. If nothing helps, <a href="https://github.com/babinyurii/recan_gui/issues"> you can open and issue or report a bug.</a></p>
 {% endblock %} 
