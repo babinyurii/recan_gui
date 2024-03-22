@@ -25,9 +25,9 @@ class SessionData(models.Model):
         Session,
         on_delete=models.CASCADE
     )
-    alignment = models.CharField(max_length=100, blank=True, null=True)
+    alignment = models.CharField(max_length=100, blank=True, null=True, verbose_name='alignment name')
     alignment_with_key = models.CharField(max_length=132, blank=True, null=True)
-    align_len = models.IntegerField(blank=True, null=True)
+    align_len = models.IntegerField(blank=True, null=True, verbose_name='sequence length')
     region_start = models.IntegerField(default=0)
     region_end = models.IntegerField(blank=True, null=True)
     pot_rec_id = models.CharField(max_length=100, blank=True, null=True)
@@ -35,6 +35,10 @@ class SessionData(models.Model):
     window_size = models.IntegerField(default=50)
     window_shift = models.IntegerField(default=25)
     plot_div = models.TextField(null=True, blank=True, default="")
-    dist_method = models.CharField(default='pdist', max_length=5)
+    dist_method = models.CharField(default='pdist', max_length=5, verbose_name='genetic distance method')
     align_file = models.FileField(upload_to=save_file, default=None, null=True)
+
+    class Meta:
+        verbose_name = "Session Data"
+        verbose_name_plural = "Session Data objects"
 
