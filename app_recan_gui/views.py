@@ -1,29 +1,18 @@
 import os
-from django.contrib import messages
-from django.shortcuts import render
-from django.core.files.storage import FileSystemStorage
-from simgen.simgen import Simgen
-from .models import SessionData
-from django.forms import model_to_dict
-from django.shortcuts import get_object_or_404
 from django.conf import settings
+from django.contrib import messages
 from django.contrib.sessions.models import Session
-
-# COMMENT THIS PATH IF UPLOAD ON PYTHONANYWHERE
-#PATH_TO_MEDIA_DIR = './media/'
-
-# UNCOMMENT THIS PATH IF UPLOAD ON PYTHONANYWHERE:
-# PATH_TO_MEDIA_DIR = '/home/yuriyb/prj_recan_gui/media/'
-
-ERROR_MESSAGES = {'wrong_file_extension': "check file extension",
-                  'less_than_3_seq': "file contains less than three sequences",
-                  'plot_parameters': (
-                      "distance can't by calculated "
-                      "with chosen plot parameters."
-                      "Try to enlarge window size, window shift or both. "
-                      "If it doesn't help, change distance calculation method.")}
-
-
+from django.core.files.storage import FileSystemStorage
+from django.forms import model_to_dict
+from django.shortcuts import render, get_object_or_404
+from app_recan_gui.constants import (SEQUENCE_LIMIT_IN_INPUT_FILE,
+                                     SESSION_DATA_DEFAULT_VALUES,
+                                     ERROR_MESSAGES,
+                                     VALID_FASTA_EXTENSIONS,
+                                     # PATH_TO_MEDIA_DIR,
+                                    )
+from app_recan_gui.models import SessionData
+from simgen.simgen import Simgen
 
 
 def clean_media_dir(session_key):
@@ -56,7 +45,7 @@ def validate_num_of_sequences(file_name):
     '''
     sim_obj = Simgen(f'{settings.MEDIA_ROOT}/{file_name}')
     sequences_list = sim_obj.get_info()
-    if len(sequences_list) >= 3:
+    if len(sequences_list) >= SEQUENCE_LIMIT_IN_INPUT_FILE:
         return True
     else:
         return False
@@ -64,17 +53,17 @@ def validate_num_of_sequences(file_name):
 
 def update_session_data_with_default_values(session_key):
     session_data = SessionData.objects.get(session_key_id=session_key)
-    session_data.alignment = None
-    session_data.alignment_with_key = None
-    session_data.pot_rec_id = None
-    session_data.pot_rec_index = 0
-    session_data.plot_div = None
-    session_data.window_size = 50
-    session_data.window_shift = 25
-    session_data.align_len = None
-    session_data.region_start = 0
-    session_data.region_end = None
-    session_data.dist_method = 'pdist'
+    session_data.alignment = SESSION_DATA_DEFAULT_VALUES['alignment']
+    session_data.alignment_with_key = SESSION_DATA_DEFAULT_VALUES['alignment_with_key']
+    session_data.pot_rec_id = SESSION_DATA_DEFAULT_VALUES['pot_rec_id']
+    session_data.pot_rec_index = SESSION_DATA_DEFAULT_VALUES['pot_rec_index']
+    session_data.plot_div = SESSION_DATA_DEFAULT_VALUES['plot_div']
+    session_data.window_size = SESSION_DATA_DEFAULT_VALUES['window_size']
+    session_data.window_shift = SESSION_DATA_DEFAULT_VALUES['window_shift']
+    session_data.align_len = SESSION_DATA_DEFAULT_VALUES['align_len']
+    session_data.region_start = SESSION_DATA_DEFAULT_VALUES['region_start']
+    session_data.region_end = SESSION_DATA_DEFAULT_VALUES['region_end']
+    session_data.dist_method = SESSION_DATA_DEFAULT_VALUES['dist_method']
     session_data.save()
 
 
@@ -173,7 +162,7 @@ def recan_view(request):
         uploaded_alignment = request.FILES['alignment_file']
         alignment_name = uploaded_alignment.name
 
-        if alignment_name.rsplit('.')[-1] in ['fas', 'fa', 'fasta']:
+        if alignment_name.rsplit('.')[-1] in VALID_FASTA_EXTENSIONS:
             clean_media_dir(session_key)
             alignment_name_with_key = add_session_key_to_alignment_name(
                 alignment_name,

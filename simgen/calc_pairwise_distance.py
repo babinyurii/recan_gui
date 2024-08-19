@@ -1,9 +1,4 @@
-# -*- coding: utf-8 -*-
-
-
-from math import log, sqrt
-
-"""
+""" note on degenerated nucleotides notation
 U	Uracil (RNA)	U
 W	Weak	A/T
 S	Strong	C/G
@@ -17,17 +12,18 @@ H	Not G	A/C/T
 V	Not T	A/C/G
 N	Any	A/C/G/T
 """
+
+from math import log, sqrt
+
+
 DEGENERATE_NUCS = ("U", "W", "S", "M", "K", "R", "Y", "B", "D", "H", "V", "N")
 
 def estimate_nucleotide_frequencies(seq):
-    
     seq = seq.replace("-","").upper()
-    
     A = seq.count("A")
     C = seq.count("C")
     G = seq.count("G")
     T = seq.count("T")
-    
     length = float(len(seq))
     
     return [ x / length for x in [A, C ,G, T] ]
@@ -37,7 +33,6 @@ def p_distance(seq1, seq2):
     """calculates pairwise distance between two sequences
     distance = num of different nucleotides / total nucleotides
     """
-    
     different_nucs = 0
     nuc_pairs = []
     
@@ -61,10 +56,7 @@ def p_distance(seq1, seq2):
               region of the alignment. 2. too short window span""")
     
         
-    
-    
 def jc_distance(seq1, seq2):
-    
     """ 
     Jukes-Cantor 
     jc_distance = - b log(1 - p_dist / b)
@@ -84,8 +76,7 @@ def jc_distance(seq1, seq2):
         print("""the reasons for the ValueError maybe: 1. too many gaps in some
               region of the alignment. 2. too short window span""")
         
-
-       
+     
 def k2p_distance(seq1,seq2):
     """
     Kimura 2-Parameter distance 
