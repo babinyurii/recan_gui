@@ -1,8 +1,5 @@
-# -*- coding: utf-8 -*-
-
 import plotly.graph_objs as go
 import pandas as pd
-#from plotly.offline import init_notebook_mode, iplot
 from .rolling_window import RollingWindowOnAlignment
 from .calc_pairwise_distance import calc_pairwise_distance
 
@@ -19,10 +16,8 @@ class Simgen():
         self.pot_rec_id = None
         
         
-    def _plot_distance_by_plotly(self):
-                
+    def _plot_distance_by_plotly(self):     
         """draws similarity plot using plotly"""
-        #init_notebook_mode()
         data = []
         for key in self.distance_data.keys():
             trace = go.Scatter(y=self.distance_data[key], x=self.ticks_for_x_axis, name=key)
@@ -34,14 +29,10 @@ class Simgen():
             yaxis=dict(
                 title="sequence identity"),
             legend=dict(x=-0.1, y=1.5, orientation="h"))
-            #legend=dict(x=-0.1, y=1.5))
             
         fig = go.Figure(data=data, layout=layout)
         plot = fig.to_html()
         return plot
-
-        #iplot(fig)
-        #print("potential recombinant: ", self.pot_rec_id)
         
         
     def _get_ticks_for_x_axis(self):
@@ -64,7 +55,6 @@ class Simgen():
         """ get id of the potential recombinant from
         the alignment slices
         """
-        
         for slice in self.align_sliced.values():
             slice_0 = slice
             break
@@ -74,7 +64,6 @@ class Simgen():
     
     
     def _prepare_distance_data(self):
-        
         """ makes dictionary for distance data collection
         keys are sequences names (ids from the alignment)
         values are lists of distances to the potential recombinant
@@ -188,9 +177,7 @@ class Simgen():
                 df.to_csv(out_name + ".csv")
             else:
                 print("invalid output file format")
-        
-   
-        
+          
         
     def get_data(self, df=True):
         """returns distance data
@@ -207,7 +194,7 @@ class Simgen():
         else:
             return self.ticks_for_x_axis, self.distance_data
         
-    # rename into get_sequences_names_list
+    # TODO rename into get_sequences_names_list
     def get_info(self):
         """outputs information about the alignment: 
         index (which is the row number), 

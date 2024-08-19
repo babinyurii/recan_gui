@@ -1,5 +1,6 @@
 from Bio import AlignIO
-#import io
+
+
 class RollingWindowOnAlignment():
     """
     alignment obj as the biopython multiple alignment
@@ -38,8 +39,6 @@ class RollingWindowOnAlignment():
     
     
     def roll_window_along_alignment_region(self, window_len, window_step, region):
-    
-        
         window_start = region[0]
         window_end = region[0] + window_len
         window_step = window_step
