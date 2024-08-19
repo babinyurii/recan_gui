@@ -39,6 +39,6 @@ class SessionData(models.Model):
     align_file = models.FileField(upload_to=save_file, default=None, null=True)
 
     class Meta:
-        verbose_name = "Session Data"
-        verbose_name_plural = "Session Data objects"
+        verbose_name = "Uploaded alignment and its plotting settings"
+        verbose_name_plural = "Uploaded alignments and their plotting settings"
 
