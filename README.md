@@ -1,3 +1,6 @@
+[![DOI](https://joss.theoj.org/papers/10.21105/joss.02014/status.svg)](https://doi.org/10.21105/joss.02014)
+[![PyPI version](https://badge.fury.io/py/recan.svg)](https://badge.fury.io/py/recan)
+
 # recan_gui
 Recan_gui is a Django-based web version of recan. It allows to analyze recombination events in viral genomes using genetic distance plotting. The tool is currently available at http://yuriyb.pythonanywhere.com.
 # Guide
@@ -41,6 +44,12 @@ Norovirus recombinant isolate:
 3. Liitsola, K., Holm K., Bobkov, A., Pokrovsky, V., Smolskaya,T., Leinikki,P., Osmanov,S. and Salminen,M. (2000) An AB recombinant and its parental HIV type 1 strains in the area of the former Soviet Union: low requirements for sequence identity in recombination. UNAIDS Virus Isolation Network. AIDS Res. Hum. Retroviruses, 16, 1047–1053.
 4. Smith, D. B., Bukh, J., Kuiken, C., Muerhoff, A. S., Rice, C. M., Stapleton, J. T., & Simmonds, P. (2014). Expanded classification of hepatitis C virus into 7 genotypes and 67 subtypes: Updated criteria and genotype assignment web resource. Hepatology, 59(1), 318–327. https://doi.org/10.1002/hep.26744
 5. Jiang,X., Espul,C., Zhong,W.M., Cuello,H. and Matson,D.O. (1999) Characterization of a novel human calicivirus that may be a naturally occurring recombinant. Arch. Virol., 144, 2377–2387
+
+## recan citations
+1. Characterization of SARS-CoV-2 P.1 (Gamma) Variant of Concern From Amazonas, Brazil. Zimerman RA et al. (2022). Comparative Genomics and Front. Med. 9:806611.  https://doi.org/10.3389/fmed.2022.806611
+2. In book: Proceedings of the 4th International Conference on Big Data Analytics for Cyber-Physical System in Smart City - Volume 2. Chapter: Python Data Analysis Techniques in Administrative Information Integration Management System April 2023  https://doi.org/10.1007/978-981-99-1157-8_35
+3. Substantial viral diversity in bats and rodents from East Africa: insights into evolution, recombination, and cocirculation. Daxi Wang et al. 2024. Microbiome (2024) 12:72 https://doi.org/10.1186/s40168-024-01782-4
+4. Identification of Recombinant Aichivirus D in Cattle, Italy.Pellegrini, F et al. I Animals 2024, 14, 3315. https://doi.org/10.3390/ani14223315
 
 
 
