@@ -1,5 +1,4 @@
 [![DOI](https://joss.theoj.org/papers/10.21105/joss.02014/status.svg)](https://doi.org/10.21105/joss.02014)
-[![PyPI version](https://badge.fury.io/py/recan.svg)](https://badge.fury.io/py/recan)
 
 # recan_gui
 Recan_gui is a Django-based web version of recan. It allows to analyze recombination events in viral genomes using genetic distance plotting. The tool is currently available at http://yuriyb.pythonanywhere.com.
