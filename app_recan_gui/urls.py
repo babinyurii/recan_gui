@@ -7,5 +7,6 @@ from django.conf import settings
 
 urlpatterns = [
     path("", recan_view, name="recan_view"),
+    path("citations/", TemplateView.as_view(template_name='citations.html'), name='citations'),
     path("example_datasets/", TemplateView.as_view(template_name='example_datasets.html'), name='datasets')
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
