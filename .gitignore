@@ -14,7 +14,7 @@ media/*
 .pytest_cache
 # 
 *.ipynb
-
+*.ipynb_checkpoints
 ### nucleotide sequences in fasta format
 ./media/*.fasta
 ./media/*.fas
