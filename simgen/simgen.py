@@ -2,7 +2,9 @@ import plotly.graph_objs as go
 import pandas as pd
 from .rolling_window import RollingWindowOnAlignment
 from .calc_pairwise_distance import calc_pairwise_distance
-
+from plotly.subplots import make_subplots
+import json
+import plotly
 
 class Simgen():
     
@@ -28,12 +30,75 @@ class Simgen():
                 title="nucleotide position"),
             yaxis=dict(
                 title="sequence identity"),
-            legend=dict(x=-0.1, y=1.5, orientation="h"))
+            legend=dict(x=-0.1, y=1.5, orientation="h")
+           )
+        
+
+        """
+        legend_fig = go.Figure()
+        for trace in data:
+            legend_fig.add_trace(go.Scatter(
+                x=[None], y=[None],
+                mode='markers',
+                name=trace.name,
+                marker=trace.marker,
+                showlegend=True
+            ))
+        """
+
             
         fig = go.Figure(data=data, layout=layout)
-        plot = fig.to_html()
-        return plot
-        
+        fig.update_layout(
+            legend=dict(
+                orientation="v",
+                yanchor="top",
+                y=1,
+                xanchor="left",
+                x=1.01,  # смещаем за пределы графика
+                bgcolor="rgba(255,255,255,0.9)",
+                bordercolor="black",
+                borderwidth=1,
+                font=dict(size=12),
+                itemwidth=30,
+            ),
+            margin=dict(r=100, l=50, t=50, b=50),
+        )
+        html_content = f'''
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+            <style>
+                .plot-container {{
+                    position: relative;
+                    width: 100%;
+                    overflow: visible !important;
+                }}
+                .plotly-graph {{
+                    width: 100%;
+                }}
+                /* Обеспечиваем видимость легенды за пределами графика */
+                .main-svg {{
+                    overflow: visible !important;
+                }}
+            </style>
+        </head>
+        <body>
+            <div id="myPlot" class="plot-container"></div>
+            <script>
+                var plotData = {json.dumps(fig.data, cls=plotly.utils.PlotlyJSONEncoder)};
+                var plotLayout = {json.dumps(fig.layout, cls=plotly.utils.PlotlyJSONEncoder)};
+                Plotly.newPlot('myPlot', plotData, plotLayout);
+            </script>
+        </body>
+        </html>
+        '''
+
+
+        #plot = fig.to_html()
+        #legend = legend_fig.to_html()
+        #return plot
+        return html_content
         
     def _get_ticks_for_x_axis(self):
         """

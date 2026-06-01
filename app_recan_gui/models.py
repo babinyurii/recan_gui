@@ -37,6 +37,8 @@ class SessionData(models.Model):
     plot_div = models.TextField(null=True, blank=True, default="")
     dist_method = models.CharField(default='pdist', max_length=5, verbose_name='genetic distance method')
     align_file = models.FileField(upload_to=save_file, default=None, null=True)
+    legend_div = models.TextField(null=True, blank=True, default="")
+
 
     class Meta:
         verbose_name = "Uploaded alignment and its plotting settings"
