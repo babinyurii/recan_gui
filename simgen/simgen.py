@@ -63,42 +63,11 @@ class Simgen():
             ),
             margin=dict(r=100, l=50, t=50, b=50),
         )
-        html_content = f'''
-        <!DOCTYPE html>
-        <html>
-        <head>
-            <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
-            <style>
-                .plot-container {{
-                    position: relative;
-                    width: 100%;
-                    overflow: visible !important;
-                }}
-                .plotly-graph {{
-                    width: 100%;
-                }}
-                /* Обеспечиваем видимость легенды за пределами графика */
-                .main-svg {{
-                    overflow: visible !important;
-                }}
-            </style>
-        </head>
-        <body>
-            <div id="myPlot" class="plot-container"></div>
-            <script>
-                var plotData = {json.dumps(fig.data, cls=plotly.utils.PlotlyJSONEncoder)};
-                var plotLayout = {json.dumps(fig.layout, cls=plotly.utils.PlotlyJSONEncoder)};
-                Plotly.newPlot('myPlot', plotData, plotLayout);
-            </script>
-        </body>
-        </html>
-        '''
+        
 
 
-        #plot = fig.to_html()
-        #legend = legend_fig.to_html()
-        #return plot
-        return html_content
+        plot = fig.to_html()
+        return plot
         
     def _get_ticks_for_x_axis(self):
         """
