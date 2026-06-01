@@ -106,8 +106,8 @@ def collect_plot_input_params(sim_obj, session_data, plot_data):
 
 
 def plot_distance(session_data, sim_obj):
-    if session_data.region_start and session_data.region_start:
-        plot = sim_obj.simgen(window=session_data.window_size,
+    if session_data.region_start and session_data.region_end:
+        plot  = sim_obj.simgen(window=session_data.window_size,
                               shift=session_data.window_shift,
                               pot_rec=session_data.pot_rec_index,
                               region=(session_data.region_start,
@@ -120,6 +120,8 @@ def plot_distance(session_data, sim_obj):
                               dist=session_data.dist_method)
 
     session_data.plot_div = plot
+    # TODO 
+    #session_data.legend_div = legend
     session_data.save()
 
 
@@ -206,6 +208,7 @@ def recan_view(request):
             except (TypeError, ZeroDivisionError):
                 messages.error(request, ERROR_MESSAGES['plot_parameters'])
                 session_data.plot_div = None
+                #session_data.legend_div = None
                 session_data.save()
 
         context = get_context_from_db(session_key)

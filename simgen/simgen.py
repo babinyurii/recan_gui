@@ -2,6 +2,14 @@ import plotly.graph_objs as go
 import pandas as pd
 from .rolling_window import RollingWindowOnAlignment
 from .calc_pairwise_distance import calc_pairwise_distance
+from plotly.subplots import make_subplots
+import json
+import plotly
+
+def truncate_legend_name(name, max_len=25):
+    if len(name) >= max_len:
+        name = name[:max_len] + '...'
+    return name
 
 
 class Simgen():
@@ -20,7 +28,7 @@ class Simgen():
         """draws similarity plot using plotly"""
         data = []
         for key in self.distance_data.keys():
-            trace = go.Scatter(y=self.distance_data[key], x=self.ticks_for_x_axis, name=key)
+            trace = go.Scatter(y=self.distance_data[key], x=self.ticks_for_x_axis, name=truncate_legend_name(key))
             data.append(trace)
         
         layout = go.Layout(
@@ -28,12 +36,44 @@ class Simgen():
                 title="nucleotide position"),
             yaxis=dict(
                 title="sequence identity"),
-            legend=dict(x=-0.1, y=1.5, orientation="h"))
+            legend=dict(x=-0.1, y=1.5, orientation="h")
+           )
+        
+
+        """
+        legend_fig = go.Figure()
+        for trace in data:
+            legend_fig.add_trace(go.Scatter(
+                x=[None], y=[None],
+                mode='markers',
+                name=trace.name,
+                marker=trace.marker,
+                showlegend=True
+            ))
+        """
+
             
         fig = go.Figure(data=data, layout=layout)
+        fig.update_layout(
+            legend=dict(
+                orientation="v",
+                yanchor="top",
+                y=1,
+                xanchor="left",
+                x=1.01,  # смещаем за пределы графика
+                bgcolor="rgba(255,255,255,0.9)",
+                bordercolor="black",
+                borderwidth=1,
+                font=dict(size=12),
+                itemwidth=30,
+            ),
+            margin=dict(r=100, l=50, t=50, b=50),
+        )
+        
+
+
         plot = fig.to_html()
         return plot
-        
         
     def _get_ticks_for_x_axis(self):
         """
