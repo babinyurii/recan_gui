@@ -6,6 +6,12 @@ from plotly.subplots import make_subplots
 import json
 import plotly
 
+def truncate_legend_name(name, max_len=25):
+    if len(name) >= max_len:
+        name = name[:max_len] + '...'
+    return name
+
+
 class Simgen():
     
     def __init__(self, in_file):
@@ -22,7 +28,7 @@ class Simgen():
         """draws similarity plot using plotly"""
         data = []
         for key in self.distance_data.keys():
-            trace = go.Scatter(y=self.distance_data[key], x=self.ticks_for_x_axis, name=key)
+            trace = go.Scatter(y=self.distance_data[key], x=self.ticks_for_x_axis, name=truncate_legend_name(key))
             data.append(trace)
         
         layout = go.Layout(
