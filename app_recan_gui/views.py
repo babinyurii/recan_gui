@@ -164,17 +164,24 @@ def recan_view(request):
         session_key = request.session.session_key
         uploaded_alignment = request.FILES['alignment_file']
         alignment_name = uploaded_alignment.name
-
+        print('*' * 100, '\n', 'alignment_name: ', alignment_name, 'uploaded_alignment: ', uploaded_alignment, flush=True)
+        
+        
         if alignment_name.rsplit('.')[-1] in VALID_FASTA_EXTENSIONS:
             clean_media_dir(session_key)
             alignment_name_with_key = add_session_key_to_alignment_name(
                 alignment_name,
                 session_key)
+            print('*' * 100, '\n', 'alignment_name_with_key: ', alignment_name_with_key, flush=True)
             #save_file_in_media_dir(uploaded_alignment,
             #                       alignment_name_with_key)
             session_data_obj = SessionData.objects.get(session_key=session_key)
+            print("session data obj: ", session_data_obj, flush=True)
+            print('---' * 100, flush=True)
+            print("uploaded alignment just before saving into align_file: ", uploaded_alignment, flush=True)
             session_data_obj.align_file = uploaded_alignment
             session_data_obj.save()
+            breakpoint()
             if validate_num_of_sequences(alignment_name_with_key):
                 update_session_data_with_start_values(alignment_name_with_key,
                                                       session_key,
