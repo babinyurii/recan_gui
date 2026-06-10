@@ -31,13 +31,6 @@ def add_session_key_to_alignment_name(alignment_name, session_key):
     return alignment_base_name + '_' + session_key + '.' + fasta_extension
 
 
-def save_file_in_media_dir(uploaded_alignment, alignment_name_with_key):
-    """add key to file name, save it
-    """
-    fs = FileSystemStorage()
-    fs.save(alignment_name_with_key, uploaded_alignment)
-
-
 def validate_num_of_sequences(file_name):
     '''
     check if the number of sequences in the uploaded
@@ -66,10 +59,10 @@ def update_session_data_with_default_values(session_key):
     session_data.save()
 
 
-def update_session_data_with_start_values(alignment_name_with_key,
+def update_session_data_with_start_values(align_file,
                                           session_key,
                                           alignment_name):
-    sim_obj = Simgen(f'{settings.MEDIA_ROOT}/{alignment_name_with_key}')
+    sim_obj = Simgen(f'{settings.MEDIA_ROOT}/{align_file}')
     session_data = SessionData.objects.get(session_key_id=session_key)
     session_data.alignment = alignment_name
     session_data.region_start = SESSION_DATA_DEFAULT_VALUES['region_start']
@@ -159,9 +152,6 @@ def recan_view(request):
         
         if alignment_name.rsplit('.')[-1] in VALID_FASTA_EXTENSIONS:
             clean_media_dir(session_key)
-            alignment_name_with_key = add_session_key_to_alignment_name(
-                alignment_name,
-                session_key)
             session_data_obj = SessionData.objects.get(session_key=session_key)
             session_data_obj.align_file = uploaded_alignment
             session_data_obj.save()
