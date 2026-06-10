@@ -26,7 +26,6 @@ class SessionData(models.Model):
         on_delete=models.CASCADE
     )
     alignment = models.CharField(max_length=100, blank=True, null=True, verbose_name='alignment name')
-    alignment_with_key = models.CharField(max_length=132, blank=True, null=True)
     align_len = models.IntegerField(blank=True, null=True, verbose_name='sequence length')
     region_start = models.IntegerField(default=0)
     region_end = models.IntegerField(blank=True, null=True)
