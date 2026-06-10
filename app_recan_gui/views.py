@@ -54,7 +54,7 @@ def validate_num_of_sequences(file_name):
 def update_session_data_with_default_values(session_key):
     session_data = SessionData.objects.get(session_key_id=session_key)
     session_data.alignment = SESSION_DATA_DEFAULT_VALUES['alignment']
-    session_data.alignment_with_key = SESSION_DATA_DEFAULT_VALUES['alignment_with_key']
+    #session_data.alignment_with_key = SESSION_DATA_DEFAULT_VALUES['alignment_with_key']
     session_data.pot_rec_id = SESSION_DATA_DEFAULT_VALUES['pot_rec_id']
     session_data.pot_rec_index = SESSION_DATA_DEFAULT_VALUES['pot_rec_index']
     session_data.plot_div = SESSION_DATA_DEFAULT_VALUES['plot_div']
@@ -206,7 +206,7 @@ def recan_view(request):
     elif request.method == 'POST' and 'calc_plot_form' in request.POST:
         session_key = request.session.session_key
         session_data = SessionData.objects.get(session_key_id=session_key)
-        input_file_name = session_data.alignment_with_key # TODO: align_file
+        input_file_name = session_data.align_file # TODO: align_file
         
         try:
             sim_obj = Simgen(f'{settings.MEDIA_ROOT}/{input_file_name}')
