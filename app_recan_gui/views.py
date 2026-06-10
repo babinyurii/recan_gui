@@ -5,11 +5,11 @@ from django.contrib.sessions.models import Session
 from django.core.files.storage import FileSystemStorage
 from django.forms import model_to_dict
 from django.shortcuts import render, get_object_or_404
-from app_recan_gui.constants import (SEQUENCE_LIMIT_IN_INPUT_FILE,
+from app_recan_gui.constants import (
+                                    SEQUENCE_LIMIT_IN_INPUT_FILE,
                                      SESSION_DATA_DEFAULT_VALUES,
                                      ERROR_MESSAGES,
                                      VALID_FASTA_EXTENSIONS,
-                                     # PATH_TO_MEDIA_DIR,
                                     )
 from app_recan_gui.models import SessionData
 from simgen.simgen import Simgen
@@ -54,7 +54,6 @@ def validate_num_of_sequences(file_name):
 def update_session_data_with_default_values(session_key):
     session_data = SessionData.objects.get(session_key_id=session_key)
     session_data.alignment = SESSION_DATA_DEFAULT_VALUES['alignment']
-    #session_data.alignment_with_key = SESSION_DATA_DEFAULT_VALUES['alignment_with_key']
     session_data.pot_rec_id = SESSION_DATA_DEFAULT_VALUES['pot_rec_id']
     session_data.pot_rec_index = SESSION_DATA_DEFAULT_VALUES['pot_rec_index']
     session_data.plot_div = SESSION_DATA_DEFAULT_VALUES['plot_div']
@@ -73,7 +72,6 @@ def update_session_data_with_start_values(alignment_name_with_key,
     sim_obj = Simgen(f'{settings.MEDIA_ROOT}/{alignment_name_with_key}')
     session_data = SessionData.objects.get(session_key_id=session_key)
     session_data.alignment = alignment_name
-    #session_data.alignment_with_key = alignment_name_with_key
     session_data.region_start = SESSION_DATA_DEFAULT_VALUES['region_start']
     session_data.region_end = sim_obj.alignment_roll_window.align.get_alignment_length()
     session_data.align_len = session_data.region_end
@@ -91,12 +89,10 @@ def collect_plot_input_params(sim_obj, session_data, plot_data):
     session_data.pot_rec_id = plot_data.get('pot_rec')
     session_data.pot_rec_index = sim_obj.get_info().index(
         plot_data.get('pot_rec'))
-    # if int(plot_data.get('region_start')) != session_data.region_start:
     if plot_data.get('region_start') == '':
         session_data.region_start = 0
     else:
         session_data.region_start = int(plot_data.get('region_start'))
-    # if int(plot_data.get('region_end')) != session_data.region_end:
     if plot_data.get('region_end') == '':
         session_data.region_start = sim_obj.alignment_roll_window.align.get_alignment_length()
     else:
@@ -121,17 +117,13 @@ def plot_distance(session_data, sim_obj):
                               dist=session_data.dist_method)
 
     session_data.plot_div = plot
-    # TODO 
-    #session_data.legend_div = legend
     session_data.save()
 
 
 def get_context_from_db(session_key):
     context = model_to_dict(get_object_or_404(SessionData, session_key=session_key))
-    # TODO: delete if context as later we have except
-    #if context["alignment_with_key"]:
     try:
-        sim_obj = Simgen(f'{settings.MEDIA_ROOT}/{context["align_file"]}') # TODO: align_file instead of alignment_with_key
+        sim_obj = Simgen(f'{settings.MEDIA_ROOT}/{context["align_file"]}')
         context['sequences'] = sim_obj.get_info()
     except FileNotFoundError:
         update_session_data_with_default_values(session_key)
@@ -160,38 +152,24 @@ def recan_view(request):
         session_key = get_session_key(request)
         context = get_context_from_db(session_key)
         return render(request, 'recan.html', context=context)
-    #and 'btn_submit_alignment' in request.POST 
     elif request.method == 'POST' and 'alignment_file' in request.FILES:
         session_key = request.session.session_key
         uploaded_alignment = request.FILES['alignment_file']
-        alignment_name = uploaded_alignment.name
-        print('*' * 100, '\n', 'alignment_name: ', alignment_name, 'uploaded_alignment: ', uploaded_alignment, flush=True)
-        
+        alignment_name = uploaded_alignment.name        
         
         if alignment_name.rsplit('.')[-1] in VALID_FASTA_EXTENSIONS:
             clean_media_dir(session_key)
             alignment_name_with_key = add_session_key_to_alignment_name(
                 alignment_name,
                 session_key)
-            print('*' * 100, '\n', 'alignment_name_with_key: ', alignment_name_with_key, flush=True)
-            #save_file_in_media_dir(uploaded_alignment,
-            #                       alignment_name_with_key)
             session_data_obj = SessionData.objects.get(session_key=session_key)
-            print("session data obj: ", session_data_obj, flush=True)
-            print('---' * 100, flush=True)
-            print("uploaded alignment just before saving into align_file: ", uploaded_alignment, flush=True)
             session_data_obj.align_file = uploaded_alignment
             session_data_obj.save()
-            #breakpoint()
-            #if validate_num_of_sequences(alignment_name_with_key):
+            
             if validate_num_of_sequences(session_data_obj.align_file):
-                print('saved file: ', session_data_obj.align_file)
-                #breakpoint()
-
                 update_session_data_with_start_values(session_data_obj.align_file,
                                                       session_key,
                                                       alignment_name)
-                #breakpoint()
             else:
                 update_session_data_with_default_values(session_key)
                 messages.error(request, ERROR_MESSAGES['less_than_3_seq'])
@@ -206,7 +184,7 @@ def recan_view(request):
     elif request.method == 'POST' and 'calc_plot_form' in request.POST:
         session_key = request.session.session_key
         session_data = SessionData.objects.get(session_key_id=session_key)
-        input_file_name = session_data.align_file # TODO: align_file
+        input_file_name = session_data.align_file 
         
         try:
             sim_obj = Simgen(f'{settings.MEDIA_ROOT}/{input_file_name}')
@@ -222,7 +200,6 @@ def recan_view(request):
             except (TypeError, ZeroDivisionError):
                 messages.error(request, ERROR_MESSAGES['plot_parameters'])
                 session_data.plot_div = None
-                #session_data.legend_div = None
                 session_data.save()
 
         context = get_context_from_db(session_key)
