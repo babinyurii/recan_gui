@@ -73,7 +73,7 @@ def update_session_data_with_start_values(alignment_name_with_key,
     sim_obj = Simgen(f'{settings.MEDIA_ROOT}/{alignment_name_with_key}')
     session_data = SessionData.objects.get(session_key_id=session_key)
     session_data.alignment = alignment_name
-    session_data.alignment_with_key = alignment_name_with_key
+    #session_data.alignment_with_key = alignment_name_with_key
     session_data.region_start = SESSION_DATA_DEFAULT_VALUES['region_start']
     session_data.region_end = sim_obj.alignment_roll_window.align.get_alignment_length()
     session_data.align_len = session_data.region_end
@@ -128,13 +128,14 @@ def plot_distance(session_data, sim_obj):
 
 def get_context_from_db(session_key):
     context = model_to_dict(get_object_or_404(SessionData, session_key=session_key))
-    if context["alignment_with_key"]:
-        try:
-            sim_obj = Simgen(f'{settings.MEDIA_ROOT}/{context["alignment_with_key"]}')
-            context['sequences'] = sim_obj.get_info()
-        except FileNotFoundError:
-            update_session_data_with_default_values(session_key)
-            context = model_to_dict(get_object_or_404(SessionData, session_key=session_key))
+    # TODO: delete if context as later we have except
+    #if context["alignment_with_key"]:
+    try:
+        sim_obj = Simgen(f'{settings.MEDIA_ROOT}/{context["align_file"]}') # TODO: align_file instead of alignment_with_key
+        context['sequences'] = sim_obj.get_info()
+    except FileNotFoundError:
+        update_session_data_with_default_values(session_key)
+        context = model_to_dict(get_object_or_404(SessionData, session_key=session_key))
     return context
 
 
@@ -181,11 +182,16 @@ def recan_view(request):
             print("uploaded alignment just before saving into align_file: ", uploaded_alignment, flush=True)
             session_data_obj.align_file = uploaded_alignment
             session_data_obj.save()
-            breakpoint()
-            if validate_num_of_sequences(alignment_name_with_key):
-                update_session_data_with_start_values(alignment_name_with_key,
+            #breakpoint()
+            #if validate_num_of_sequences(alignment_name_with_key):
+            if validate_num_of_sequences(session_data_obj.align_file):
+                print('saved file: ', session_data_obj.align_file)
+                #breakpoint()
+
+                update_session_data_with_start_values(session_data_obj.align_file,
                                                       session_key,
                                                       alignment_name)
+                #breakpoint()
             else:
                 update_session_data_with_default_values(session_key)
                 messages.error(request, ERROR_MESSAGES['less_than_3_seq'])
@@ -200,7 +206,7 @@ def recan_view(request):
     elif request.method == 'POST' and 'calc_plot_form' in request.POST:
         session_key = request.session.session_key
         session_data = SessionData.objects.get(session_key_id=session_key)
-        input_file_name = session_data.alignment_with_key
+        input_file_name = session_data.alignment_with_key # TODO: align_file
         
         try:
             sim_obj = Simgen(f'{settings.MEDIA_ROOT}/{input_file_name}')
