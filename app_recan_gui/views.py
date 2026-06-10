@@ -66,6 +66,8 @@ def update_session_data_with_start_values(align_file,
     session_data = SessionData.objects.get(session_key_id=session_key)
     session_data.alignment = alignment_name
     session_data.region_start = SESSION_DATA_DEFAULT_VALUES['region_start']
+    session_data.window_size = SESSION_DATA_DEFAULT_VALUES['window_size']
+    session_data.window_shift = SESSION_DATA_DEFAULT_VALUES['window_shift']
     session_data.region_end = sim_obj.alignment_roll_window.align.get_alignment_length()
     session_data.align_len = session_data.region_end
     pot_rec_id = sim_obj.get_info()[0]
