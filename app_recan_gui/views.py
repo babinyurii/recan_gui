@@ -120,7 +120,8 @@ def get_context_from_db(session_key):
     try:
         sim_obj = Simgen(f'{settings.MEDIA_ROOT}/{context["align_file"]}')
         context['sequences'] = sim_obj.get_info()
-    except FileNotFoundError:
+    # need all these errors, as they may occur after deleting files, or in deployment bugs
+    except (FileNotFoundError, IsADirectoryError, OSError): 
         update_session_data_with_default_values(session_key)
         context = model_to_dict(get_object_or_404(SessionData, session_key=session_key))
     return context
